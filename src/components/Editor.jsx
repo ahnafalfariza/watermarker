@@ -5,6 +5,7 @@ import TemplatePanel from './Sidebar/TemplatePanel.jsx'
 import Preview from './Canvas/Preview.jsx'
 import FileInfo from './Canvas/FileInfo.jsx'
 import BatchPanel from './BatchPanel.jsx'
+import ThemeToggle from './ThemeToggle.jsx'
 import { processImage } from '../lib/imageProcessor.js'
 import { processPdf } from '../lib/pdfProcessor.js'
 import { processBatch, createZip } from '../lib/batchCoordinator.js'
@@ -100,9 +101,12 @@ export default function Editor({
     <div className="editor">
       <header className="header">
         <h1 className="header-title">Watermark</h1>
-        <button className="btn btn-ghost" onClick={onStartOver}>
-          Start Over
-        </button>
+        <div className="header-actions">
+          <ThemeToggle />
+          <button className="btn btn-ghost" onClick={onStartOver}>
+            Start Over
+          </button>
+        </div>
       </header>
 
       <div className="editor-layout">

@@ -85,6 +85,32 @@ body {
   letter-spacing: -0.01em;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-theme-toggle:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+  border-color: var(--text-tertiary);
+}
+
 /* ─── Drop Zone Page ─── */
 .dropzone-page {
   min-height: 100vh;

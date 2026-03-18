@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef } from 'react'
+import ThemeToggle from './ThemeToggle.jsx'
 
 export default function DropZone({ onFiles }) {
   const [dragOver, setDragOver] = useState(false)
@@ -36,6 +37,7 @@ export default function DropZone({ onFiles }) {
     <div className="dropzone-page">
       <header className="header">
         <h1 className="header-title">Watermark</h1>
+        <ThemeToggle />
       </header>
 
       <main className="dropzone-content">
