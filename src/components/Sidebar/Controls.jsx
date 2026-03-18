@@ -19,7 +19,7 @@ const COLOR_PRESETS = [
 
 const MAX_LOGO_SIZE = 5 * 1024 * 1024 // 5MB
 
-export default function Controls({ watermark, onChange }) {
+export default function Controls({ watermark, onChange, addToast }) {
   const logoInputRef = useRef(null)
 
   const handleText = useCallback((e) => onChange('text', e.target.value), [onChange])
@@ -33,8 +33,8 @@ export default function Controls({ watermark, onChange }) {
     if (!file) return
 
     if (file.size > MAX_LOGO_SIZE) {
-      // Reset the input so the same file can be re-selected
       e.target.value = ''
+      addToast?.('Logo file too large — maximum size is 5 MB.', 'error')
       return
     }
 
@@ -47,12 +47,12 @@ export default function Controls({ watermark, onChange }) {
         onChange('logoElement', img)
         onChange('logoFileName', file.name)
       } catch {
-        // Failed to load — reset
         e.target.value = ''
+        addToast?.('Could not load image — file may be corrupt.', 'error')
       }
     }
     reader.readAsDataURL(file)
-  }, [onChange])
+  }, [onChange, addToast])
 
   const handleRemoveLogo = useCallback(() => {
     onChange('logoDataUri', null)

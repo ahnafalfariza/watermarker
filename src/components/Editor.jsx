@@ -121,7 +121,7 @@ export default function Editor({
 
       <div className="editor-layout">
         <aside className="sidebar">
-          <Controls watermark={watermark} onChange={updateWatermark} />
+          <Controls watermark={watermark} onChange={updateWatermark} addToast={addToast} />
           <PositionGrid watermark={watermark} onChange={updateWatermark} />
           <TemplatePanel watermark={watermark} onLoad={onWatermarkChange} addToast={addToast} />
 
