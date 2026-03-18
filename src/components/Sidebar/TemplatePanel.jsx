@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { getTemplates, saveTemplate, deleteTemplate, loadTemplate } from '../../lib/templateManager.js'
+import { loadLogoImage } from '../../lib/watermarkRenderer.js'
 
 export default function TemplatePanel({ watermark, onLoad, addToast }) {
   const [templates, setTemplates] = useState([])
@@ -13,7 +14,7 @@ export default function TemplatePanel({ watermark, onLoad, addToast }) {
   const handleSave = useCallback(() => {
     if (!newName.trim()) return
 
-    const { text, ...config } = watermark
+    const { text, logoElement, ...config } = watermark
     const result = saveTemplate(newName.trim(), config)
 
     if (result.success) {
@@ -29,9 +30,17 @@ export default function TemplatePanel({ watermark, onLoad, addToast }) {
     }
   }, [newName, watermark, addToast])
 
-  const handleLoad = useCallback((name) => {
+  const handleLoad = useCallback(async (name) => {
     const config = loadTemplate(name)
     if (config) {
+      // Reconstruct logoElement from saved dataUri if present
+      if (config.logoDataUri) {
+        try {
+          config.logoElement = await loadLogoImage(config.logoDataUri)
+        } catch {
+          config.logoElement = null
+        }
+      }
       onLoad(prev => ({ ...prev, ...config }))
       addToast(`Template "${name}" loaded.`, 'success')
     }

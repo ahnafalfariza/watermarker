@@ -2,14 +2,8 @@
 
 ## P1 — High Priority
 
-### Image / Logo Watermark Support
-**What:** Allow users to upload a PNG/SVG logo as the watermark overlay instead of (or alongside) text.
-**Why:** Text-only watermarks feel amateurish for professional photographers and brand teams. Logo watermarks are the industry standard.
-**Pros:** Unlocks the professional photographer use case; SVG logos scale perfectly at any size on Canvas.
-**Cons:** Adds UI complexity (two watermark type modes — text vs image); SVG rendering in Canvas has some edge cases (CSS styles stripped).
-**Context:** The v1 Canvas architecture already supports `drawImage()` — adding an image watermark is additive, not a rewrite. The main work is the upload UI, aspect-ratio handling, and Canvas compositing mode.
-**Effort:** M (human ~3 days → CC ~30 min)
-**Depends on:** v1 shipping (Canvas infrastructure already in place)
+### ~~Image / Logo Watermark Support~~ ✓ Done
+**Shipped:** Text/Image mode toggle in sidebar. Users upload PNG/SVG/WebP logos (max 5MB). Shared size, opacity, position, and tiled controls work for both modes. Logo images cached for fast re-renders. Templates save/load logo data URIs. Logo preview with checkerboard transparency background and "Remove" button.
 
 ---
 

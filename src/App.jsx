@@ -12,6 +12,7 @@ function App() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [toasts, setToasts] = useState([])
   const [watermark, setWatermark] = useState({
+    mode: 'text',
     text: '',
     font: 'Satoshi',
     size: 48,
@@ -21,6 +22,9 @@ function App() {
     tiled: false,
     tiledAngle: -30,
     tiledSpacing: 200,
+    logoDataUri: null,
+    logoElement: null,
+    logoFileName: null,
   })
 
   const addToast = useCallback((message, type = 'info') => {

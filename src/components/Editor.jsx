@@ -10,6 +10,11 @@ import { processImage } from '../lib/imageProcessor.js'
 import { processPdf } from '../lib/pdfProcessor.js'
 import { processBatch, createZip } from '../lib/batchCoordinator.js'
 
+function isWatermarkReady(watermark) {
+  if (watermark.mode === 'image') return !!watermark.logoElement
+  return !!watermark.text
+}
+
 export default function Editor({
   files,
   activeIndex,
@@ -25,9 +30,10 @@ export default function Editor({
   const activeFile = files[activeIndex]
   const isBatch = files.length > 1
   const isPdf = activeFile?.type === 'application/pdf'
+  const canDownload = isWatermarkReady(watermark)
 
   const handleDownloadSingle = useCallback(async () => {
-    if (!watermark.text) return
+    if (!isWatermarkReady(watermark)) return
     setDownloading(true)
     try {
       let blob
@@ -55,7 +61,7 @@ export default function Editor({
   }, [activeFile, watermark, isPdf, addToast])
 
   const handleDownloadZip = useCallback(async () => {
-    if (!watermark.text) return
+    if (!isWatermarkReady(watermark)) return
     setDownloading(true)
     setBatchProgress({ completed: 0, total: files.length, status: 'processing' })
 
@@ -97,6 +103,10 @@ export default function Editor({
     onWatermarkChange(prev => ({ ...prev, [key]: value }))
   }, [onWatermarkChange])
 
+  const downloadHint = watermark.mode === 'image'
+    ? 'Upload a logo above to download'
+    : 'Enter watermark text above to download'
+
   return (
     <div className="editor">
       <header className="header">
@@ -129,7 +139,7 @@ export default function Editor({
               <button
                 className="btn btn-primary btn-full"
                 onClick={handleDownloadZip}
-                disabled={!watermark.text || downloading}
+                disabled={!canDownload || downloading}
               >
                 {downloading ? 'Processing files...' : `Download ZIP (${files.length} files)`}
               </button>
@@ -137,13 +147,13 @@ export default function Editor({
               <button
                 className="btn btn-primary btn-full"
                 onClick={handleDownloadSingle}
-                disabled={!watermark.text || downloading}
+                disabled={!canDownload || downloading}
               >
                 {downloading ? 'Processing...' : 'Download'}
               </button>
             )}
-            {!watermark.text && !downloading && (
-              <p className="sidebar-hint">Enter watermark text above to download</p>
+            {!canDownload && !downloading && (
+              <p className="sidebar-hint">{downloadHint}</p>
             )}
           </div>
         </aside>

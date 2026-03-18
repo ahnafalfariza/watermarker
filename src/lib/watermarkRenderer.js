@@ -1,5 +1,5 @@
 /**
- * Shared watermark renderer — draws watermark text onto a canvas context.
+ * Shared watermark renderer — draws watermark text or image onto a canvas context.
  * Used by both image and PDF processors for DRY watermark drawing.
  */
 
@@ -25,14 +25,40 @@ const FONT_MAP = {
   'Futura':         "'Futura', 'Century Gothic', sans-serif",
 }
 
+/**
+ * Load and cache a logo image from a data URI.
+ * Returns an HTMLImageElement ready for drawImage.
+ */
+const logoCache = new Map()
+
+export function loadLogoImage(dataUri) {
+  if (logoCache.has(dataUri)) return Promise.resolve(logoCache.get(dataUri))
+  return new Promise((resolve, reject) => {
+    const img = new Image()
+    img.onload = () => {
+      logoCache.set(dataUri, img)
+      resolve(img)
+    }
+    img.onerror = () => reject(new Error('Could not load logo image.'))
+    img.src = dataUri
+  })
+}
+
 export function drawWatermark(ctx, width, height, config) {
+  if (config.mode === 'image') {
+    drawImageWatermark(ctx, width, height, config)
+  } else {
+    drawTextWatermark(ctx, width, height, config)
+  }
+}
+
+function drawTextWatermark(ctx, width, height, config) {
   const { text, font, size, opacity, color, position, tiled, tiledAngle, tiledSpacing } = config
 
   if (!text) return
 
   const fontFamily = FONT_MAP[font] || FONT_MAP['Satoshi']
   const minDim = Math.min(width, height)
-  // Scale font size relative to image dimensions (size is a percentage-like value)
   const fontSize = Math.max(12, Math.round((size / 100) * minDim * 0.5))
 
   ctx.save()
@@ -43,9 +69,8 @@ export function drawWatermark(ctx, width, height, config) {
   ctx.textBaseline = 'middle'
 
   if (tiled) {
-    // Scale spacing relative to image dimensions, same as font size
     const relativeSpacing = (tiledSpacing / 500) * minDim * 0.5
-    drawTiledWatermark(ctx, width, height, text, fontSize, tiledAngle, relativeSpacing)
+    drawTiledText(ctx, width, height, text, fontSize, tiledAngle, relativeSpacing)
   } else {
     const pos = POSITION_MAP[position] || POSITION_MAP['center']
     const x = width * pos.x
@@ -56,11 +81,9 @@ export function drawWatermark(ctx, width, height, config) {
   ctx.restore()
 }
 
-function drawTiledWatermark(ctx, width, height, text, fontSize, angle, spacing) {
+function drawTiledText(ctx, width, height, text, fontSize, angle, spacing) {
   const radians = (angle * Math.PI) / 180
   const gap = Math.max(fontSize * 1.5, spacing)
-
-  // Calculate the diagonal to ensure full coverage when rotated
   const diagonal = Math.sqrt(width * width + height * height)
 
   ctx.save()
@@ -73,6 +96,51 @@ function drawTiledWatermark(ctx, width, height, text, fontSize, angle, spacing) 
   for (let y = startY; y < diagonal; y += gap) {
     for (let x = startX; x < diagonal; x += gap * 2) {
       ctx.fillText(text, x, y)
+    }
+  }
+
+  ctx.restore()
+}
+
+function drawImageWatermark(ctx, width, height, config) {
+  const { logoElement, size, opacity, position, tiled, tiledAngle, tiledSpacing } = config
+
+  if (!logoElement) return
+
+  const minDim = Math.min(width, height)
+  // Scale logo: size% of the smaller dimension
+  const logoW = Math.max(16, Math.round((size / 100) * minDim * 0.6))
+  const logoH = Math.round(logoW * (logoElement.naturalHeight / logoElement.naturalWidth))
+
+  ctx.save()
+  ctx.globalAlpha = opacity / 100
+
+  if (tiled) {
+    drawTiledImage(ctx, width, height, logoElement, logoW, logoH, tiledAngle, tiledSpacing, minDim)
+  } else {
+    const pos = POSITION_MAP[position] || POSITION_MAP['center']
+    const x = width * pos.x - logoW / 2
+    const y = height * pos.y - logoH / 2
+    ctx.drawImage(logoElement, x, y, logoW, logoH)
+  }
+
+  ctx.restore()
+}
+
+function drawTiledImage(ctx, width, height, logoElement, logoW, logoH, angle, spacing, minDim) {
+  const radians = (angle * Math.PI) / 180
+  const relativeSpacing = (spacing / 500) * minDim * 0.5
+  const gapX = Math.max(logoW * 1.5, relativeSpacing * 2)
+  const gapY = Math.max(logoH * 1.5, relativeSpacing)
+  const diagonal = Math.sqrt(width * width + height * height)
+
+  ctx.save()
+  ctx.translate(width / 2, height / 2)
+  ctx.rotate(radians)
+
+  for (let y = -diagonal; y < diagonal; y += gapY) {
+    for (let x = -diagonal; x < diagonal; x += gapX) {
+      ctx.drawImage(logoElement, x - logoW / 2, y - logoH / 2, logoW, logoH)
     }
   }
 
