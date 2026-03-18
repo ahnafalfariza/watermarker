@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import DropZone from './components/DropZone.jsx'
 import Editor from './components/Editor.jsx'
 import Toast from './components/Toast.jsx'
@@ -11,6 +11,7 @@ function App() {
   const [files, setFiles] = useState([])
   const [activeIndex, setActiveIndex] = useState(0)
   const [toasts, setToasts] = useState([])
+  const pwaRegisteredRef = useRef(false)
   const [watermark, setWatermark] = useState({
     mode: 'text',
     text: '',
@@ -27,13 +28,18 @@ function App() {
     logoFileName: null,
   })
 
-  const addToast = useCallback((message, type = 'info') => {
+  const addToast = useCallback((message, type = 'info', options = {}) => {
+    const { persistent = false, actionLabel = null, onAction = null, key = null } = options
     const id = Date.now() + Math.random()
     setToasts(prev => {
-      const next = [...prev, { id, message, type }]
+      if (key && prev.some(t => t.key === key)) {
+        return prev
+      }
+      const nextToast = { id, key, message, type, actionLabel, onAction }
+      const next = [...prev, nextToast]
       return next.slice(-3) // max 3 toasts
     })
-    if (type !== 'error') {
+    if (!persistent && type !== 'error') {
       setTimeout(() => {
         setToasts(prev => prev.filter(t => t.id !== id))
       }, 4000)
@@ -44,6 +50,42 @@ function App() {
   const dismissToast = useCallback((id) => {
     setToasts(prev => prev.filter(t => t.id !== id))
   }, [])
+
+  useEffect(() => {
+    if (pwaRegisteredRef.current) return
+    pwaRegisteredRef.current = true
+
+    let isMounted = true
+
+    import('virtual:pwa-register')
+      .then(({ registerSW }) => {
+        const updateSW = registerSW({
+          immediate: true,
+          onNeedRefresh() {
+            if (!isMounted) return
+            addToast('A new version is ready.', 'info', {
+              persistent: true,
+              key: 'pwa-update-available',
+              actionLabel: 'Refresh',
+              onAction: async () => {
+                await updateSW(true)
+              },
+            })
+          },
+          onOfflineReady() {
+            if (!isMounted) return
+            addToast('Offline mode is ready.', 'success', { key: 'pwa-offline-ready' })
+          },
+        })
+      })
+      .catch(() => {
+        // Ignore registration failures in unsupported environments.
+      })
+
+    return () => {
+      isMounted = false
+    }
+  }, [addToast])
 
   const handleFiles = useCallback((newFiles) => {
     const fileArray = Array.from(newFiles)

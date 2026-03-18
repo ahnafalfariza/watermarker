@@ -876,6 +876,24 @@ input[type="range"]::-moz-range-thumb {
 
 .toast-message { flex: 1; }
 
+.toast-action {
+  background: var(--accent-muted);
+  color: var(--accent);
+  border: 1px solid rgba(14, 165, 233, 0.35);
+  border-radius: var(--radius-sm);
+  padding: 4px 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.toast-action:hover {
+  background: rgba(14, 165, 233, 0.2);
+  border-color: var(--accent);
+}
+
 .toast-dismiss {
   background: none;
   border: none;

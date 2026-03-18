@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <title>Watermark icon</title>
+  <desc>Abstract aperture mark with integrated watermark W.</desc>
+
+  <rect width="512" height="512" rx="112" fill="#0A0A0B" />
+  <rect x="40" y="40" width="432" height="432" rx="88" fill="#18181B" stroke="#27272A" stroke-width="8" />
+
+  <circle cx="256" cy="256" r="132" fill="none" stroke="#0EA5E9" stroke-width="22" opacity="0.35" />
+  <path d="M256 124A132 132 0 0 1 370 190" fill="none" stroke="#0EA5E9" stroke-width="22" stroke-linecap="round" />
+  <path d="M370 190A132 132 0 0 1 342 342" fill="none" stroke="#0EA5E9" stroke-width="22" stroke-linecap="round" />
+  <path d="M342 342A132 132 0 0 1 170 342" fill="none" stroke="#0EA5E9" stroke-width="22" stroke-linecap="round" />
+  <path d="M170 342A132 132 0 0 1 142 190" fill="none" stroke="#0EA5E9" stroke-width="22" stroke-linecap="round" />
+  <path d="M142 190A132 132 0 0 1 256 124" fill="none" stroke="#0EA5E9" stroke-width="22" stroke-linecap="round" />
+
+  <path
+    d="M188 208L226 322L256 266L286 322L324 208"
+    fill="none"
+    stroke="#0EA5E9"
+    stroke-width="24"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>
