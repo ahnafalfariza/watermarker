@@ -760,12 +760,21 @@ input[type="range"]::-moz-range-thumb {
 
 /* ─── Responsive ─── */
 @media (max-width: 768px) {
-  .editor-layout { flex-direction: column; }
+  .editor-layout {
+    flex-direction: column;
+    overflow: auto;
+  }
   .sidebar {
     width: 100%;
     border-right: none;
     border-bottom: 1px solid var(--border);
-    max-height: 40vh;
+    max-height: none;
+    overflow-y: visible;
+    flex-shrink: 0;
+  }
+  .canvas-area {
+    min-height: 300px;
+    flex-shrink: 0;
   }
   .dropzone { padding: 48px 24px; }
 }
