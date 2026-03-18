@@ -127,7 +127,7 @@ export default function Editor({
                 onClick={handleDownloadZip}
                 disabled={!watermark.text || downloading}
               >
-                {downloading ? 'Preparing...' : `Download ZIP (${files.length} files)`}
+                {downloading ? 'Processing files...' : `Download ZIP (${files.length} files)`}
               </button>
             ) : (
               <button
@@ -135,8 +135,11 @@ export default function Editor({
                 onClick={handleDownloadSingle}
                 disabled={!watermark.text || downloading}
               >
-                {downloading ? 'Preparing...' : 'Download'}
+                {downloading ? 'Processing...' : 'Download'}
               </button>
+            )}
+            {!watermark.text && !downloading && (
+              <p className="sidebar-hint">Enter watermark text above to download</p>
             )}
           </div>
         </aside>
