@@ -9,6 +9,16 @@
 
 ## P2 — Medium Priority
 
+### Text watermark clipping at corner positions
+**What:** When a text watermark is positioned at a corner (e.g. bottom-right) with a large size, the text extends beyond the canvas edge and is visually clipped (e.g. "CONFIDENTIAL" renders as "CONFIDE"). Requires measuring text width before placement and clamping x/y accordingly.  
+**Category:** Visual / Functional  
+**Found by:** /qa on master, 2026-03-19  
+**Report:** `.gstack/qa-reports/qa-report-localhost-2026-03-19.md`  
+**Effort:** XS (human ~1 hour → CC ~5 min)  
+**Note:** Image watermark corner clipping was fixed in ISSUE-002 (a2744b5). Text path needs equivalent fix using `ctx.measureText()`.
+
+
+
 ### Shareable Template URLs
 **What:** Encode watermark templates as URL query parameters so users can share their exact setup with teammates (e.g., `?text=CONFIDENTIAL&opacity=30&pos=center&tiled=true`).
 **Why:** Teams often want consistent watermark settings across members. Without this, each person configures manually.
@@ -18,7 +28,8 @@
 **Effort:** S (human ~4 hours → CC ~10 min)
 **Depends on:** Template system (v1)
 
-### Progressive Web App (PWA) / Offline Support
+### ~~Progressive Web App (PWA) / Offline Support~~ ✓ Done
+**Shipped:** Added `vite-plugin-pwa` with `autoUpdate` service worker registration, installable web manifest, dark-theme metadata, and cache-first static asset precache for offline reloads after first visit.
 **What:** Add `manifest.json` and a service worker to make the app installable on desktop/mobile and functional offline after first load.
 **Why:** The app is already 100% client-side — PWA is a natural extension. Offline support further strengthens the "your files never leave your device" story.
 **Pros:** Installable to desktop; works without internet; privacy story strengthens; fast repeat loads.
