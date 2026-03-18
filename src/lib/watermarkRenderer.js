@@ -73,8 +73,11 @@ function drawTextWatermark(ctx, width, height, config) {
     drawTiledText(ctx, width, height, text, fontSize, tiledAngle, relativeSpacing)
   } else {
     const pos = POSITION_MAP[position] || POSITION_MAP['center']
-    const x = width * pos.x
-    const y = height * pos.y
+    const textW = ctx.measureText(text).width
+    const halfW = textW / 2
+    const halfH = fontSize / 2
+    const x = Math.max(halfW, Math.min(width - halfW, width * pos.x))
+    const y = Math.max(halfH, Math.min(height - halfH, height * pos.y))
     ctx.fillText(text, x, y)
   }
 
