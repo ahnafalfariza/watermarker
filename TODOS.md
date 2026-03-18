@@ -9,13 +9,8 @@
 
 ## P2 — Medium Priority
 
-### Text watermark clipping at corner positions
-**What:** When a text watermark is positioned at a corner (e.g. bottom-right) with a large size, the text extends beyond the canvas edge and is visually clipped (e.g. "CONFIDENTIAL" renders as "CONFIDE"). Requires measuring text width before placement and clamping x/y accordingly.  
-**Category:** Visual / Functional  
-**Found by:** /qa on master, 2026-03-19  
-**Report:** `.gstack/qa-reports/qa-report-localhost-2026-03-19.md`  
-**Effort:** XS (human ~1 hour → CC ~5 min)  
-**Note:** Image watermark corner clipping was fixed in ISSUE-002 (a2744b5). Text path needs equivalent fix using `ctx.measureText()`.
+### ~~Text watermark clipping at corner positions~~ ✓ Done
+**Shipped:** Used `ctx.measureText()` to measure text width before placement. Center x/y are clamped to keep text fully within the canvas. For text wider than the canvas, `ctx.fillText` `maxWidth` is used to compress horizontally rather than clip. Commit: ddc54d1
 
 
 
