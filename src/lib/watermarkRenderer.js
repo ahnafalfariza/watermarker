@@ -119,8 +119,8 @@ function drawImageWatermark(ctx, width, height, config) {
     drawTiledImage(ctx, width, height, logoElement, logoW, logoH, tiledAngle, tiledSpacing, minDim)
   } else {
     const pos = POSITION_MAP[position] || POSITION_MAP['center']
-    const x = width * pos.x - logoW / 2
-    const y = height * pos.y - logoH / 2
+    const x = Math.max(0, Math.min(width - logoW, width * pos.x - logoW / 2))
+    const y = Math.max(0, Math.min(height - logoH, height * pos.y - logoH / 2))
     ctx.drawImage(logoElement, x, y, logoW, logoH)
   }
 
