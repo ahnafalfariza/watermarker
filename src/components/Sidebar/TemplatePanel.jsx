@@ -1,0 +1,93 @@
+import { useState, useEffect, useCallback } from 'react'
+import { getTemplates, saveTemplate, deleteTemplate, loadTemplate } from '../../lib/templateManager.js'
+
+export default function TemplatePanel({ watermark, onLoad, addToast }) {
+  const [templates, setTemplates] = useState([])
+  const [saving, setSaving] = useState(false)
+  const [newName, setNewName] = useState('')
+
+  useEffect(() => {
+    setTemplates(getTemplates())
+  }, [])
+
+  const handleSave = useCallback(() => {
+    if (!newName.trim()) return
+
+    const { text, ...config } = watermark
+    const result = saveTemplate(newName.trim(), config)
+
+    if (result.success) {
+      if (result.evicted) {
+        addToast(`Storage full — removed oldest template "${result.evicted}".`, 'warning')
+      }
+      addToast(`Template "${newName.trim()}" saved.`, 'success')
+      setTemplates(getTemplates())
+      setNewName('')
+      setSaving(false)
+    } else {
+      addToast('Could not save template — storage full.', 'error')
+    }
+  }, [newName, watermark, addToast])
+
+  const handleLoad = useCallback((name) => {
+    const config = loadTemplate(name)
+    if (config) {
+      onLoad(prev => ({ ...prev, ...config }))
+      addToast(`Template "${name}" loaded.`, 'success')
+    }
+  }, [onLoad, addToast])
+
+  const handleDelete = useCallback((name) => {
+    deleteTemplate(name)
+    setTemplates(getTemplates())
+  }, [])
+
+  return (
+    <div className="control-group">
+      <label className="control-label">Templates</label>
+      <div className="template-chips">
+        {templates.map(t => (
+          <div key={t.name} className="template-chip">
+            <button
+              className="template-chip-name"
+              onClick={() => handleLoad(t.name)}
+              title={`Load "${t.name}"`}
+            >
+              {t.name}
+            </button>
+            <button
+              className="template-chip-delete"
+              onClick={() => handleDelete(t.name)}
+              aria-label={`Delete template ${t.name}`}
+            >
+              &times;
+            </button>
+          </div>
+        ))}
+
+        {saving ? (
+          <div className="template-save-form">
+            <input
+              type="text"
+              className="input input-sm"
+              placeholder="Template name"
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSave()}
+              autoFocus
+            />
+            <button className="btn btn-sm btn-primary" onClick={handleSave}>Save</button>
+            <button className="btn btn-sm btn-ghost" onClick={() => setSaving(false)}>Cancel</button>
+          </div>
+        ) : (
+          <button
+            className="template-chip template-chip-add"
+            onClick={() => setSaving(true)}
+          >
+            + Save
+          </button>
+        )}
+      </div>
+    </div>
+  )
+}

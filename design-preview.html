@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Watermark App — Design System Preview</title>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&f[]=instrument-sans@400,500,600&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/geist@1.2.0/dist/fonts/geist-mono/style.min.css" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A0A0B;
+    --surface: #18181B;
+    --surface-hover: #1f1f23;
+    --border: #27272A;
+    --border-subtle: #1e1e21;
+    --text: #FAFAFA;
+    --text-secondary: #A1A1AA;
+    --text-tertiary: #71717A;
+    --accent: #0EA5E9;
+    --accent-hover: #38BDF8;
+    --accent-muted: rgba(14, 165, 233, 0.12);
+    --success: #22C55E;
+    --warning: #F59E0B;
+    --error: #EF4444;
+    --info: #0EA5E9;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --font-display: 'Satoshi', system-ui, sans-serif;
+    --font-body: 'Instrument Sans', system-ui, sans-serif;
+    --font-mono: 'Geist Mono', 'SF Mono', monospace;
+  }
+
+  [data-theme="light"] {
+    --bg: #FAFAFA;
+    --surface: #FFFFFF;
+    --surface-hover: #F4F4F5;
+    --border: #E4E4E7;
+    --border-subtle: #F4F4F5;
+    --text: #09090B;
+    --text-secondary: #52525B;
+    --text-tertiary: #A1A1AA;
+    --accent: #0284C7;
+    --accent-hover: #0369A1;
+    --accent-muted: rgba(2, 132, 199, 0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── Layout ─── */
+  .container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .section {
+    padding: 64px 0;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .section:last-child { border-bottom: none; }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 32px;
+    color: var(--text);
+  }
+
+  /* ─── Theme Toggle ─── */
+  .theme-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 100;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 8px 14px;
+    border-radius: var(--radius-md);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .theme-toggle:hover {
+    background: var(--surface-hover);
+    color: var(--text);
+  }
+
+  /* ─── Header ─── */
+  .header {
+    padding: 80px 0 48px;
+    text-align: center;
+  }
+
+  .header h1 {
+    font-family: var(--font-display);
+    font-size: 48px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    margin-bottom: 12px;
+  }
+
+  .header p {
+    color: var(--text-secondary);
+    font-size: 17px;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .header .privacy-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 20px;
+    padding: 6px 14px;
+    background: var(--accent-muted);
+    border: 1px solid rgba(14, 165, 233, 0.2);
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--accent);
+  }
+
+  /* ─── Font Specimens ─── */
+  .font-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .font-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+  }
+
+  .font-card .font-role {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 16px;
+  }
+
+  .font-card .font-name {
+    color: var(--text-tertiary);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    margin-top: 16px;
+  }
+
+  .font-card.display-font .specimen {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .font-card.body-font .specimen {
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+  }
+
+  .font-card.mono-font .specimen {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .font-card.full-width {
+    grid-column: 1 / -1;
+  }
+
+  /* ─── Type Scale ─── */
+  .type-scale {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .type-scale-row {
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .type-scale-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-tertiary);
+    min-width: 80px;
+    flex-shrink: 0;
+  }
+
+  /* ─── Color Palette ─── */
+  .palette-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .swatch {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .swatch-color {
+    height: 80px;
+  }
+
+  .swatch-info {
+    padding: 10px 12px;
+    background: var(--surface);
+  }
+
+  .swatch-name {
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+
+  .swatch-hex {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-tertiary);
+  }
+
+  /* ─── UI Components ─── */
+  .components-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .component-group {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+  }
+
+  .component-group h4 {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 16px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-primary:hover { background: var(--accent-hover); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover { background: var(--surface-hover); border-color: var(--text-tertiary); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-secondary);
+    padding: 10px 12px;
+  }
+  .btn-ghost:hover { color: var(--text); background: var(--accent-muted); }
+
+  .btn-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .input-field {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 14px;
+    transition: border-color 0.15s ease;
+    outline: none;
+  }
+  .input-field:focus { border-color: var(--accent); }
+  .input-field::placeholder { color: var(--text-tertiary); }
+
+  .input-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: var(--text-secondary);
+  }
+
+  .input-group { margin-bottom: 14px; }
+
+  .slider-track {
+    width: 100%;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    position: relative;
+    margin: 8px 0;
+  }
+
+  .slider-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    width: 60%;
+  }
+
+  .slider-thumb {
+    width: 16px;
+    height: 16px;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+    border-radius: 50%;
+    position: absolute;
+    top: -6px;
+    left: 58%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+
+  /* Alerts */
+  .alert {
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .alert-success { background: rgba(34, 197, 94, 0.1); color: var(--success); border: 1px solid rgba(34, 197, 94, 0.2); }
+  .alert-warning { background: rgba(245, 158, 11, 0.1); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.2); }
+  .alert-error   { background: rgba(239, 68, 68, 0.1);  color: var(--error);   border: 1px solid rgba(239, 68, 68, 0.2); }
+  .alert-info    { background: var(--accent-muted);       color: var(--accent);  border: 1px solid rgba(14, 165, 233, 0.2); }
+
+  /* ─── Product Mockup: Workspace ─── */
+  .mockup-workspace {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .mockup-titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .mockup-titlebar-dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .mockup-titlebar-dots span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+
+  .mockup-titlebar-title {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .mockup-titlebar-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--accent);
+    background: var(--accent-muted);
+    padding: 3px 8px;
+    border-radius: 999px;
+  }
+
+  .mockup-body {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    min-height: 420px;
+  }
+
+  .mockup-sidebar {
+    padding: 20px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .mockup-sidebar-section h5 {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-tertiary);
+    margin-bottom: 10px;
+  }
+
+  .mockup-canvas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    position: relative;
+  }
+
+  .mockup-photo {
+    width: 100%;
+    max-width: 480px;
+    aspect-ratio: 3 / 2;
+    background: linear-gradient(135deg, #1a3a2a 0%, #0d2818 40%, #1a2a1a 100%);
+    border-radius: var(--radius-md);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  .mockup-photo::before {
+    content: '';
+    position: absolute;
+    top: 30%;
+    left: 20%;
+    width: 60%;
+    height: 40%;
+    background: radial-gradient(ellipse, rgba(34, 197, 94, 0.15) 0%, transparent 70%);
+  }
+
+  .mockup-photo::after {
+    content: '';
+    position: absolute;
+    top: 10%;
+    right: 15%;
+    width: 30%;
+    height: 50%;
+    background: radial-gradient(ellipse, rgba(14, 165, 233, 0.1) 0%, transparent 60%);
+  }
+
+  .mockup-watermark-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  .mockup-watermark-text {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.25);
+    transform: rotate(-30deg);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .mockup-file-info {
+    position: absolute;
+    bottom: 12px;
+    right: 16px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-tertiary);
+    background: var(--surface);
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
+
+  /* Position grid */
+  .position-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+  }
+
+  .position-cell {
+    aspect-ratio: 1;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .position-cell.active {
+    background: var(--accent-muted);
+    border-color: var(--accent);
+  }
+
+  /* Toggle */
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 0;
+  }
+
+  .toggle-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .toggle-switch {
+    width: 36px;
+    height: 20px;
+    background: var(--border);
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .toggle-switch.active {
+    background: var(--accent);
+  }
+
+  .toggle-switch::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.15s ease;
+  }
+
+  .toggle-switch.active::after {
+    transform: translateX(16px);
+  }
+
+  /* ─── Drop Zone Mockup ─── */
+  .mockup-dropzone {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 48px;
+    text-align: center;
+  }
+
+  .dropzone-inner {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-lg);
+    padding: 64px 32px;
+    transition: all 0.15s ease;
+  }
+
+  .dropzone-inner:hover {
+    border-color: var(--accent);
+    background: var(--accent-muted);
+  }
+
+  .dropzone-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 16px;
+    background: var(--accent-muted);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    font-size: 24px;
+  }
+
+  .dropzone-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .dropzone-subtitle {
+    color: var(--text-tertiary);
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .dropzone-formats {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-tertiary);
+    margin-top: 16px;
+  }
+
+  /* ─── Batch Progress Mockup ─── */
+  .mockup-batch {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .batch-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .batch-header h5 {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .batch-count {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-tertiary);
+  }
+
+  .batch-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .batch-item:last-child { border-bottom: none; }
+
+  .batch-thumb {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+  }
+
+  .batch-item-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .batch-item-name {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .batch-item-size {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-tertiary);
+  }
+
+  .batch-item-status {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
+  .batch-item-status.done { color: var(--success); }
+  .batch-item-status.processing { color: var(--accent); }
+  .batch-item-status.queued { color: var(--text-tertiary); }
+
+  .batch-progress-bar {
+    height: 3px;
+    background: var(--border);
+  }
+
+  .batch-progress-fill {
+    height: 100%;
+    background: var(--accent);
+    width: 60%;
+    transition: width 0.3s ease;
+  }
+
+  .batch-footer {
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--border);
+  }
+
+  .batch-footer-info {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-tertiary);
+  }
+
+  /* ─── Two-col mockup layout ─── */
+  .mockup-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 24px;
+  }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 768px) {
+    .font-grid,
+    .components-grid,
+    .mockup-grid { grid-template-columns: 1fr; }
+
+    .mockup-body { grid-template-columns: 1fr; }
+
+    .mockup-sidebar {
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header h1 { font-size: 32px; }
+
+    .palette-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" onclick="toggleTheme()">
+  <span id="theme-icon">☀</span> Light mode
+</button>
+
+<!-- Header -->
+<div class="container">
+  <div class="header">
+    <h1>Watermark</h1>
+    <p>Design System Preview — Industrial/Utilitarian aesthetic with teal accent on dark neutrals</p>
+    <div class="privacy-badge">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a4 4 0 0 0-4 4v3H3a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1h-1V5a4 4 0 0 0-4-4zm2 7H6V5a2 2 0 1 1 4 0v3z"/></svg>
+      files never leave your device
+    </div>
+  </div>
+</div>
+
+<!-- Typography Specimens -->
+<div class="container">
+  <div class="section">
+    <div class="section-label">01 / Typography</div>
+    <div class="section-title">Font Specimens</div>
+
+    <div class="font-grid">
+      <div class="font-card display-font">
+        <div class="font-role">Display — Satoshi</div>
+        <div class="specimen">
+          Protect your<br>
+          creative work.
+        </div>
+        <div class="font-name">Satoshi Bold, 36px, -0.02em tracking</div>
+      </div>
+
+      <div class="font-card body-font">
+        <div class="font-role">Body — Instrument Sans</div>
+        <div class="specimen">
+          Add text watermarks to your photos and documents in seconds. Batch process up to 50 files at once, preview changes in real-time, and download as a ZIP. Everything happens in your browser — your files never leave your device.
+        </div>
+        <div class="font-name">Instrument Sans Regular, 15px, 1.65 line-height</div>
+      </div>
+
+      <div class="font-card mono-font full-width">
+        <div class="font-role">Monospace — Geist Mono</div>
+        <div class="specimen">
+          DSC_0847.jpg  ·  4.2 MB  ·  3840 × 2160  ·  Processing... 3/5 complete<br>
+          wedding_photo_final_v2.png  ·  12.8 MB  ·  6000 × 4000  ·  Done ✓<br>
+          contract_draft_2026.pdf  ·  1.1 MB  ·  12 pages  ·  Queued
+        </div>
+        <div class="font-name">Geist Mono Regular, 13px — for file names, sizes, progress</div>
+      </div>
+    </div>
+
+    <!-- Type Scale -->
+    <div style="margin-top: 40px;">
+      <div class="section-label" style="margin-bottom: 20px;">Type Scale</div>
+      <div class="type-scale">
+        <div class="type-scale-row">
+          <div class="type-scale-label">48px / H1</div>
+          <div style="font-family: var(--font-display); font-size: 48px; font-weight: 900; letter-spacing: -0.03em; line-height: 1.1;">Watermark</div>
+        </div>
+        <div class="type-scale-row">
+          <div class="type-scale-label">28px / H2</div>
+          <div style="font-family: var(--font-display); font-size: 28px; font-weight: 700; letter-spacing: -0.02em;">Batch Processing</div>
+        </div>
+        <div class="type-scale-row">
+          <div class="type-scale-label">20px / H3</div>
+          <div style="font-family: var(--font-display); font-size: 20px; font-weight: 600;">Watermark Settings</div>
+        </div>
+        <div class="type-scale-row">
+          <div class="type-scale-label">15px / Body</div>
+          <div style="font-family: var(--font-body); font-size: 15px; color: var(--text-secondary);">Configure position, opacity, and size of your watermark text.</div>
+        </div>
+        <div class="type-scale-row">
+          <div class="type-scale-label">13px / Small</div>
+          <div style="font-family: var(--font-body); font-size: 13px; color: var(--text-tertiary);">Supported formats: JPG, PNG, WebP, PDF</div>
+        </div>
+        <div class="type-scale-row">
+          <div class="type-scale-label">11px / Mono</div>
+          <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.08em;">Section Label</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Color Palette -->
+<div class="container">
+  <div class="section">
+    <div class="section-label">02 / Color</div>
+    <div class="section-title">Palette — Restrained</div>
+
+    <div style="margin-bottom: 8px; font-size: 13px; color: var(--text-secondary);">Core</div>
+    <div class="palette-grid">
+      <div class="swatch">
+        <div class="swatch-color" style="background: #0A0A0B;"></div>
+        <div class="swatch-info"><div class="swatch-name">Background</div><div class="swatch-hex">#0A0A0B</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #18181B;"></div>
+        <div class="swatch-info"><div class="swatch-name">Surface</div><div class="swatch-hex">#18181B</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #27272A;"></div>
+        <div class="swatch-info"><div class="swatch-name">Border</div><div class="swatch-hex">#27272A</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #0EA5E9;"></div>
+        <div class="swatch-info"><div class="swatch-name">Accent</div><div class="swatch-hex">#0EA5E9</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #FAFAFA;"></div>
+        <div class="swatch-info"><div class="swatch-name">Text</div><div class="swatch-hex">#FAFAFA</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #A1A1AA;"></div>
+        <div class="swatch-info"><div class="swatch-name">Text Secondary</div><div class="swatch-hex">#A1A1AA</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #71717A;"></div>
+        <div class="swatch-info"><div class="swatch-name">Text Tertiary</div><div class="swatch-hex">#71717A</div></div>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 8px; font-size: 13px; color: var(--text-secondary);">Semantic</div>
+    <div class="palette-grid">
+      <div class="swatch">
+        <div class="swatch-color" style="background: #22C55E;"></div>
+        <div class="swatch-info"><div class="swatch-name">Success</div><div class="swatch-hex">#22C55E</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #F59E0B;"></div>
+        <div class="swatch-info"><div class="swatch-name">Warning</div><div class="swatch-hex">#F59E0B</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #EF4444;"></div>
+        <div class="swatch-info"><div class="swatch-name">Error</div><div class="swatch-hex">#EF4444</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background: #0EA5E9;"></div>
+        <div class="swatch-info"><div class="swatch-name">Info</div><div class="swatch-hex">#0EA5E9</div></div>
+      </div>
+    </div>
+
+    <!-- Alerts -->
+    <div style="margin-top: 24px;">
+      <div style="margin-bottom: 8px; font-size: 13px; color: var(--text-secondary);">Alerts</div>
+      <div class="alert alert-success">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm3.78-9.72a.75.75 0 0 0-1.06-1.06L7 8.94 5.28 7.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.06 0l4.25-4.25z"/></svg>
+        5 files watermarked successfully. Download ready.
+      </div>
+      <div class="alert alert-warning">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg>
+        Watermark opacity is 0% — it will be invisible.
+      </div>
+      <div class="alert alert-error">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg>
+        sunset_hdr.heic — format not supported. Try JPG, PNG, or WebP.
+      </div>
+      <div class="alert alert-info">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.399l-.348-.024.127-.399H8.93zm.28-2.431a.94.94 0 0 1 0 1.884.94.94 0 0 1 0-1.884z"/></svg>
+        Files are processed locally — nothing is uploaded.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- UI Components -->
+<div class="container">
+  <div class="section">
+    <div class="section-label">03 / Components</div>
+    <div class="section-title">UI Elements</div>
+
+    <div class="components-grid">
+      <div class="component-group">
+        <h4>Buttons</h4>
+        <div class="btn-group">
+          <button class="btn btn-primary">Download ZIP</button>
+          <button class="btn btn-secondary">Save Template</button>
+          <button class="btn btn-ghost">Reset</button>
+        </div>
+      </div>
+
+      <div class="component-group">
+        <h4>Form Controls</h4>
+        <div class="input-group">
+          <label class="input-label">Watermark Text</label>
+          <input type="text" class="input-field" value="CONFIDENTIAL" />
+        </div>
+        <div class="input-group">
+          <label class="input-label">Opacity — <span style="font-family: var(--font-mono); color: var(--accent);">60%</span></label>
+          <div class="slider-track">
+            <div class="slider-fill"></div>
+            <div class="slider-thumb"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="component-group">
+        <h4>Position Grid</h4>
+        <div style="display: flex; gap: 16px; align-items: start;">
+          <div class="position-grid" style="width: 72px;">
+            <div class="position-cell"></div>
+            <div class="position-cell"></div>
+            <div class="position-cell"></div>
+            <div class="position-cell"></div>
+            <div class="position-cell active"></div>
+            <div class="position-cell"></div>
+            <div class="position-cell"></div>
+            <div class="position-cell"></div>
+            <div class="position-cell"></div>
+          </div>
+          <div>
+            <div style="font-size: 13px; margin-bottom: 8px;">Placement Mode</div>
+            <div class="toggle-row">
+              <span class="toggle-label">Tiled</span>
+              <div class="toggle-switch active"></div>
+            </div>
+            <div class="toggle-row" style="margin-top: 4px;">
+              <span class="toggle-label">Diagonal</span>
+              <div class="toggle-switch active"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="component-group">
+        <h4>Template Chip</h4>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 6px; padding: 6px 12px; background: var(--accent-muted); border: 1px solid rgba(14,165,233,0.2); border-radius: 999px; font-size: 13px; color: var(--accent); cursor: pointer;">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M2 2v4.586l7.414 7.414 4.586-4.586L6.586 2H2zm2 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg>
+            My Brand
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px; padding: 6px 12px; background: var(--surface-hover); border: 1px solid var(--border); border-radius: 999px; font-size: 13px; color: var(--text-secondary); cursor: pointer;">
+            Confidential
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px; padding: 6px 12px; background: var(--surface-hover); border: 1px solid var(--border); border-radius: 999px; font-size: 13px; color: var(--text-secondary); cursor: pointer;">
+            Draft
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Product Mockup: Drop Zone -->
+<div class="container">
+  <div class="section">
+    <div class="section-label">04 / Product Mockup</div>
+    <div class="section-title">The Homepage IS the Tool</div>
+
+    <div class="mockup-dropzone">
+      <div class="dropzone-inner">
+        <div class="dropzone-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <div class="dropzone-title">Drop files here to watermark</div>
+        <div class="dropzone-subtitle">or click to browse</div>
+        <button class="btn btn-primary">Select Files</button>
+        <div class="dropzone-formats">JPG · PNG · WebP · PDF</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Product Mockup: Editor Workspace -->
+<div class="container">
+  <div class="section">
+    <div class="section-label">05 / Product Mockup</div>
+    <div class="section-title">Editor Workspace</div>
+
+    <div class="mockup-workspace">
+      <div class="mockup-titlebar">
+        <div class="mockup-titlebar-dots">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="mockup-titlebar-title">Watermark</div>
+        <div class="mockup-titlebar-badge">files stay local</div>
+      </div>
+      <div class="mockup-body">
+        <div class="mockup-sidebar">
+          <div class="mockup-sidebar-section">
+            <h5>Watermark Text</h5>
+            <input type="text" class="input-field" value="SAMPLE" style="font-size: 13px;" />
+          </div>
+          <div class="mockup-sidebar-section">
+            <h5>Font Size</h5>
+            <div class="slider-track"><div class="slider-fill" style="width: 45%;"></div><div class="slider-thumb" style="left: 43%;"></div></div>
+            <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); margin-top: 4px;">
+              <span>12px</span><span style="color: var(--text);">32px</span><span>120px</span>
+            </div>
+          </div>
+          <div class="mockup-sidebar-section">
+            <h5>Opacity</h5>
+            <div class="slider-track"><div class="slider-fill" style="width: 30%;"></div><div class="slider-thumb" style="left: 28%;"></div></div>
+            <div style="font-family: var(--font-mono); font-size: 11px; color: var(--accent); margin-top: 4px;">30%</div>
+          </div>
+          <div class="mockup-sidebar-section">
+            <h5>Position</h5>
+            <div style="display: flex; gap: 12px; align-items: start;">
+              <div class="position-grid" style="width: 60px;">
+                <div class="position-cell"></div><div class="position-cell"></div><div class="position-cell"></div>
+                <div class="position-cell"></div><div class="position-cell active"></div><div class="position-cell"></div>
+                <div class="position-cell"></div><div class="position-cell"></div><div class="position-cell"></div>
+              </div>
+              <div style="flex: 1;">
+                <div class="toggle-row"><span class="toggle-label" style="font-size: 12px;">Tiled</span><div class="toggle-switch"></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="mockup-sidebar-section">
+            <h5>Templates</h5>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+              <div style="padding: 4px 10px; background: var(--accent-muted); border: 1px solid rgba(14,165,233,0.2); border-radius: 999px; font-size: 11px; color: var(--accent); cursor: pointer;">My Brand</div>
+              <div style="padding: 4px 10px; background: var(--bg); border: 1px solid var(--border); border-radius: 999px; font-size: 11px; color: var(--text-tertiary); cursor: pointer;">+ Save</div>
+            </div>
+          </div>
+          <div style="margin-top: auto;">
+            <button class="btn btn-primary" style="width: 100%; justify-content: center;">Download</button>
+          </div>
+        </div>
+        <div class="mockup-canvas">
+          <div class="mockup-photo">
+            <div class="mockup-watermark-overlay">
+              <div class="mockup-watermark-text">SAMPLE</div>
+            </div>
+          </div>
+          <div class="mockup-file-info">DSC_0847.jpg · 3840 × 2160 · 4.2 MB</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Product Mockup: Batch Processing -->
+<div class="container">
+  <div class="section">
+    <div class="section-label">06 / Product Mockup</div>
+    <div class="section-title">Batch Processing</div>
+
+    <div class="mockup-batch">
+      <div class="batch-progress-bar"><div class="batch-progress-fill"></div></div>
+      <div class="batch-header">
+        <h5>Processing 5 files</h5>
+        <div class="batch-count">3 of 5 done</div>
+      </div>
+      <div class="batch-item">
+        <div class="batch-thumb" style="background: linear-gradient(135deg, #1a3a2a, #0d2818);"></div>
+        <div class="batch-item-info">
+          <div class="batch-item-name">wedding_ceremony_01.jpg</div>
+          <div class="batch-item-size">4.2 MB · 3840 × 2160</div>
+        </div>
+        <div class="batch-item-status done">Done</div>
+      </div>
+      <div class="batch-item">
+        <div class="batch-thumb" style="background: linear-gradient(135deg, #2a2a1a, #181808);"></div>
+        <div class="batch-item-info">
+          <div class="batch-item-name">wedding_ceremony_02.jpg</div>
+          <div class="batch-item-size">3.8 MB · 3840 × 2160</div>
+        </div>
+        <div class="batch-item-status done">Done</div>
+      </div>
+      <div class="batch-item">
+        <div class="batch-thumb" style="background: linear-gradient(135deg, #1a1a3a, #080818);"></div>
+        <div class="batch-item-info">
+          <div class="batch-item-name">reception_group_photo.jpg</div>
+          <div class="batch-item-size">8.1 MB · 6000 × 4000</div>
+        </div>
+        <div class="batch-item-status done">Done</div>
+      </div>
+      <div class="batch-item">
+        <div class="batch-thumb" style="background: linear-gradient(135deg, #3a1a2a, #180810);"></div>
+        <div class="batch-item-info">
+          <div class="batch-item-name">first_dance.jpg</div>
+          <div class="batch-item-size">5.4 MB · 4000 × 3000</div>
+        </div>
+        <div class="batch-item-status processing">Processing...</div>
+      </div>
+      <div class="batch-item">
+        <div class="batch-thumb" style="background: linear-gradient(135deg, #2a3a1a, #101808);"></div>
+        <div class="batch-item-info">
+          <div class="batch-item-name">cake_cutting_final.jpg</div>
+          <div class="batch-item-size">6.7 MB · 4500 × 3000</div>
+        </div>
+        <div class="batch-item-status queued">Queued</div>
+      </div>
+      <div class="batch-footer">
+        <div class="batch-footer-info">Total: 28.2 MB · Est. 4 seconds remaining</div>
+        <button class="btn btn-primary" style="padding: 8px 16px; font-size: 13px;">Download ZIP</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Spacing Scale -->
+<div class="container">
+  <div class="section">
+    <div class="section-label">07 / Spacing</div>
+    <div class="section-title">4px Base Unit — Comfortable Density</div>
+
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); min-width: 60px;">2xs / 2px</div>
+        <div style="width: 2px; height: 16px; background: var(--accent); border-radius: 1px;"></div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); min-width: 60px;">xs / 4px</div>
+        <div style="width: 4px; height: 16px; background: var(--accent); border-radius: 1px;"></div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); min-width: 60px;">sm / 8px</div>
+        <div style="width: 8px; height: 16px; background: var(--accent); border-radius: 2px;"></div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); min-width: 60px;">md / 16px</div>
+        <div style="width: 16px; height: 16px; background: var(--accent); border-radius: 2px;"></div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); min-width: 60px;">lg / 24px</div>
+        <div style="width: 24px; height: 16px; background: var(--accent); border-radius: 2px;"></div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); min-width: 60px;">xl / 32px</div>
+        <div style="width: 32px; height: 16px; background: var(--accent); border-radius: 2px;"></div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); min-width: 60px;">2xl / 48px</div>
+        <div style="width: 48px; height: 16px; background: var(--accent); border-radius: 2px;"></div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); min-width: 60px;">3xl / 64px</div>
+        <div style="width: 64px; height: 16px; background: var(--accent); border-radius: 2px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Border Radius -->
+<div class="container">
+  <div class="section">
+    <div class="section-label">08 / Radius & Motion</div>
+    <div class="section-title">Shape & Transitions</div>
+
+    <div style="display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 40px;">
+      <div style="text-align: center;">
+        <div style="width: 64px; height: 64px; background: var(--accent-muted); border: 1px solid rgba(14,165,233,0.3); border-radius: 4px; margin-bottom: 8px;"></div>
+        <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary);">sm / 4px</div>
+      </div>
+      <div style="text-align: center;">
+        <div style="width: 64px; height: 64px; background: var(--accent-muted); border: 1px solid rgba(14,165,233,0.3); border-radius: 8px; margin-bottom: 8px;"></div>
+        <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary);">md / 8px</div>
+      </div>
+      <div style="text-align: center;">
+        <div style="width: 64px; height: 64px; background: var(--accent-muted); border: 1px solid rgba(14,165,233,0.3); border-radius: 12px; margin-bottom: 8px;"></div>
+        <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary);">lg / 12px</div>
+      </div>
+      <div style="text-align: center;">
+        <div style="width: 64px; height: 64px; background: var(--accent-muted); border: 1px solid rgba(14,165,233,0.3); border-radius: 9999px; margin-bottom: 8px;"></div>
+        <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary);">full / 9999px</div>
+      </div>
+    </div>
+
+    <div style="font-size: 13px; color: var(--text-secondary);">
+      <div style="margin-bottom: 8px; font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.06em;">Motion</div>
+      <div style="display: grid; grid-template-columns: 120px 1fr; gap: 8px 16px; font-family: var(--font-mono); font-size: 12px;">
+        <span style="color: var(--text-tertiary);">Easing:</span><span>enter: ease-out · exit: ease-in · move: ease-in-out</span>
+        <span style="color: var(--text-tertiary);">Duration:</span><span>micro: 50-100ms · short: 150ms · medium: 250ms</span>
+        <span style="color: var(--text-tertiary);">Philosophy:</span><span style="color: var(--text-secondary); font-family: var(--font-body);">Minimal-functional. No entrance animations. No scroll effects. The tool feels instant.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="container">
+  <div style="padding: 48px 0; text-align: center;">
+    <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.08em;">
+      Watermark App · Design System Preview · Generated by /design-consultation
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleTheme() {
+  const html = document.documentElement;
+  const btn = document.querySelector('.theme-toggle');
+  const icon = document.getElementById('theme-icon');
+  if (html.dataset.theme === 'dark') {
+    html.dataset.theme = 'light';
+    btn.innerHTML = '<span id="theme-icon">\u263E</span> Dark mode';
+  } else {
+    html.dataset.theme = 'dark';
+    btn.innerHTML = '<span id="theme-icon">\u2600</span> Light mode';
+  }
+}
+</script>
+
+</body>
+</html>
