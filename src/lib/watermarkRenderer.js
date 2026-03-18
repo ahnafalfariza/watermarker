@@ -74,11 +74,13 @@ function drawTextWatermark(ctx, width, height, config) {
   } else {
     const pos = POSITION_MAP[position] || POSITION_MAP['center']
     const textW = ctx.measureText(text).width
-    const halfW = textW / 2
+    const halfW = Math.min(textW / 2, width / 2)
     const halfH = fontSize / 2
     const x = Math.max(halfW, Math.min(width - halfW, width * pos.x))
     const y = Math.max(halfH, Math.min(height - halfH, height * pos.y))
-    ctx.fillText(text, x, y)
+    // Compress text if it's wider than the canvas so it never clips
+    const maxWidth = textW > width ? width : undefined
+    ctx.fillText(text, x, y, maxWidth)
   }
 
   ctx.restore()
