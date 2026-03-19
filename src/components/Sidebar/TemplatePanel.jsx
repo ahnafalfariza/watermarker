@@ -14,7 +14,7 @@ export default function TemplatePanel({ watermark, onLoad, addToast }) {
   const handleSave = useCallback(() => {
     if (!newName.trim()) return
 
-    const { text, logoElement, ...config } = watermark
+    const { logoElement, ...config } = watermark
     const result = saveTemplate(newName.trim(), config)
 
     if (result.success) {
