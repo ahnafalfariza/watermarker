@@ -51,6 +51,10 @@ export default function LandingPage({ onFiles }) {
   }, [])
 
   const scrollToDropZone = useCallback(() => {
+    dropZoneRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [])
+
+  const scrollToTop = useCallback(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [])
 
@@ -135,7 +139,7 @@ export default function LandingPage({ onFiles }) {
             </li>
           </ul>
 
-          <button className="landing-cta" onClick={scrollToDropZone}>
+          <button className="landing-cta" onClick={scrollToTop}>
             Try it now
             <span className="landing-cta-arrow">&rarr;</span>
           </button>
@@ -244,7 +248,7 @@ export default function LandingPage({ onFiles }) {
               </div>
             ))}
           </div>
-          <button className="landing-cta" onClick={scrollToDropZone}>
+          <button className="landing-cta" onClick={scrollToTop}>
             Try it now
             <span className="landing-cta-arrow">&rarr;</span>
           </button>
@@ -259,7 +263,7 @@ export default function LandingPage({ onFiles }) {
 
       {/* Floating CTA */}
       {showFloatingCta && (
-        <button className="floating-cta" onClick={scrollToDropZone}>
+        <button className="floating-cta" onClick={scrollToTop}>
           Try it now
         </button>
       )}
