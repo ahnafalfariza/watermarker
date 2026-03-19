@@ -69,13 +69,16 @@ body {
 
 /* ─── Header ─── */
 .header {
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--surface);
+  flex-shrink: 0;
+}
+
+.header-nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 12px 20px;
-  border-bottom: 1px solid var(--border-subtle);
-  background: var(--surface);
-  flex-shrink: 0;
 }
 
 .header-title {

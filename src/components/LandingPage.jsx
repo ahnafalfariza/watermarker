@@ -66,11 +66,15 @@ export default function LandingPage({ onFiles }) {
     <div className="landing">
       {/* Header */}
       <header className="header">
-        <h1 className="header-title">Watermark</h1>
-        <div className="header-actions">
-          <ThemeToggle />
-        </div>
+        <nav className="header-nav">
+          <h1 className="header-title">Watermark</h1>
+          <div className="header-actions">
+            <ThemeToggle />
+          </div>
+        </nav>
       </header>
+
+      <main>
 
       {/* Hero: Drop Zone */}
       <section className="landing-hero">
@@ -104,6 +108,8 @@ export default function LandingPage({ onFiles }) {
                 src="/demo/before.svg"
                 alt="Photo without watermark"
                 className="demo-image"
+                width="480"
+                height="320"
                 loading="lazy"
                 onError={(e) => { e.target.style.display = 'none' }}
               />
@@ -114,6 +120,8 @@ export default function LandingPage({ onFiles }) {
                 src="/demo/after.svg"
                 alt="Photo with watermark applied"
                 className="demo-image"
+                width="480"
+                height="320"
                 loading="lazy"
                 onError={(e) => { e.target.style.display = 'none' }}
               />
@@ -254,6 +262,8 @@ export default function LandingPage({ onFiles }) {
           </button>
         </div>
       </section>
+
+      </main>
 
       {/* Footer */}
       <footer className="landing-footer">

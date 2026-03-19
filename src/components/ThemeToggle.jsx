@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react'
 
 export default function ThemeToggle() {
   const [theme, setTheme] = useState(
-    () => document.documentElement.dataset.theme || 'dark'
+    () => typeof document !== 'undefined' ? document.documentElement.dataset.theme || 'dark' : 'dark'
   )
 
   const toggle = useCallback(() => {

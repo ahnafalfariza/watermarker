@@ -5,20 +5,97 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0EA5E9" />
-    <meta name="description" content="Client-side watermarking for images and PDFs. Files never leave your device." />
-    <meta property="og:title" content="Watermark — Client-Side Image & PDF Watermarking" />
+    <meta name="description" content="Free online watermark tool — add text or logo watermarks to images and PDFs. Batch process up to 50 files. 100% client-side, files never leave your device." />
+    <meta property="og:title" content="Watermark — Free Online Image & PDF Watermarking Tool" />
     <meta property="og:description" content="Add text or logo watermarks to images and PDFs. Batch process up to 50 files. 100% client-side — files never leave your device." />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:url" content="https://watermark.app/" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Watermark — Client-Side Image & PDF Watermarking" />
+    <meta name="twitter:title" content="Watermark — Free Online Image & PDF Watermarking Tool" />
     <meta name="twitter:description" content="Add text or logo watermarks to images and PDFs. 100% client-side — files never leave your device." />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <link rel="icon" href="/pwa-icon.svg" type="image/svg+xml" />
-    <title>Watermark</title>
+    <link rel="canonical" href="https://watermark.app/" />
+    <title>Watermark — Free Online Image & PDF Watermarking Tool</title>
     <link rel="preconnect" href="https://api.fontshare.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preload" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&f[]=instrument-sans@400,500,600&display=swap" as="style">
     <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&f[]=instrument-sans@400,500,600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/geist@1.2.0/dist/fonts/geist-mono/style.min.css" rel="stylesheet">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "name": "Watermark",
+          "url": "https://watermark.app/",
+          "description": "Free online watermark tool — add text or logo watermarks to images and PDFs. 100% client-side, files never leave your device.",
+          "applicationCategory": "MultimediaApplication",
+          "operatingSystem": "Any",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "browserRequirements": "Requires a modern web browser with JavaScript enabled"
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Is it really free?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, completely free with no limits. No accounts, no subscriptions, no watermarks on your watermarks."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Are my files uploaded anywhere?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. Everything runs in your browser. Your files never leave your device — not even temporarily."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What file types are supported?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "JPG, PNG, WebP images and PDF documents. You can batch process up to 50 files at once, up to 50MB each."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I use my company logo as a watermark?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Switch to Image mode in the editor and upload any PNG, SVG, or WebP logo. Adjust size, opacity, and position just like text watermarks."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Does it work offline?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. After your first visit, the app is cached and works without an internet connection. It's a Progressive Web App you can install on your device."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How is this different from other watermark tools?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Most watermark tools upload your files to their servers. This one doesn't. Your files stay on your device, processing happens in your browser, and there's nothing to sign up for."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>
