@@ -632,12 +632,14 @@ input[type="range"]::-moz-range-thumb {
   padding: 0;
 }
 
-.template-chip-add {
+.template-chip-add,
+.template-chip-link {
   border-style: dashed;
   color: var(--text-tertiary);
 }
 
-.template-chip-add:hover {
+.template-chip-add:hover,
+.template-chip-link:hover {
   border-color: var(--accent);
   color: var(--accent);
   background: var(--accent-muted);
@@ -1248,8 +1250,19 @@ input[type="range"]::-moz-range-thumb {
   cursor: pointer;
   box-shadow: 0 4px 16px rgba(14, 165, 233, 0.3);
   z-index: 50;
-  transition: background 0.15s ease;
   min-height: 44px;
+  opacity: 0;
+  transform: translateY(16px);
+  pointer-events: none;
+  transition: opacity 0.25s cubic-bezier(0.25, 1, 0.5, 1),
+              transform 0.25s cubic-bezier(0.25, 1, 0.5, 1),
+              background 0.15s ease;
+}
+
+.floating-cta-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
 .floating-cta:hover {

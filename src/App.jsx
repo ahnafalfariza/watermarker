@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 import LandingPage from './components/LandingPage.jsx'
 import Editor from './components/Editor.jsx'
 import Toast from './components/Toast.jsx'
+import { parseTemplateUrl } from './lib/urlTemplate.js'
 
 const SUPPORTED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf']
 const MAX_FILES = 50
@@ -27,6 +28,16 @@ function App() {
     logoElement: null,
     logoFileName: null,
   })
+
+  // Apply shared template from URL params on mount
+  useEffect(() => {
+    const config = parseTemplateUrl(window.location.search)
+    if (config) {
+      setWatermark(prev => ({ ...prev, ...config }))
+      // Clean URL without triggering navigation
+      window.history.replaceState({}, '', window.location.pathname)
+    }
+  }, [])
 
   const addToast = useCallback((message, type = 'info', options = {}) => {
     const { persistent = false, actionLabel = null, onAction = null, key = null } = options

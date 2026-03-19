@@ -262,11 +262,14 @@ export default function LandingPage({ onFiles }) {
       </footer>
 
       {/* Floating CTA */}
-      {showFloatingCta && (
-        <button className="floating-cta" onClick={scrollToTop}>
-          Try it now
-        </button>
-      )}
+      <button
+        className={`floating-cta ${showFloatingCta ? 'floating-cta-visible' : ''}`}
+        onClick={scrollToTop}
+        aria-hidden={!showFloatingCta}
+        tabIndex={showFloatingCta ? 0 : -1}
+      >
+        Try it now
+      </button>
     </div>
   )
 }

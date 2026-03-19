@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { getTemplates, saveTemplate, deleteTemplate, loadTemplate } from '../../lib/templateManager.js'
 import { loadLogoImage } from '../../lib/watermarkRenderer.js'
+import { encodeTemplateUrl } from '../../lib/urlTemplate.js'
 
 export default function TemplatePanel({ watermark, onLoad, addToast }) {
   const [templates, setTemplates] = useState([])
@@ -51,6 +52,18 @@ export default function TemplatePanel({ watermark, onLoad, addToast }) {
     setTemplates(getTemplates())
   }, [])
 
+  const handleCopyLink = useCallback(() => {
+    const url = encodeTemplateUrl(watermark)
+    if (!url) {
+      addToast('Nothing to share — using default settings.', 'info')
+      return
+    }
+    navigator.clipboard.writeText(url).then(
+      () => addToast('Template link copied to clipboard.', 'success'),
+      () => addToast('Could not copy link.', 'error')
+    )
+  }, [watermark, addToast])
+
   return (
     <div className="control-group">
       <label className="control-label">Templates</label>
@@ -89,12 +102,21 @@ export default function TemplatePanel({ watermark, onLoad, addToast }) {
             <button className="btn btn-sm btn-ghost" onClick={() => setSaving(false)}>Cancel</button>
           </div>
         ) : (
-          <button
-            className="template-chip template-chip-add"
-            onClick={() => setSaving(true)}
-          >
-            + Save
-          </button>
+          <>
+            <button
+              className="template-chip template-chip-add"
+              onClick={() => setSaving(true)}
+            >
+              + Save
+            </button>
+            <button
+              className="template-chip template-chip-link"
+              onClick={handleCopyLink}
+              title="Copy shareable link with current settings"
+            >
+              Copy link
+            </button>
+          </>
         )}
       </div>
     </div>
