@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
-import DropZone from './components/DropZone.jsx'
+import LandingPage from './components/LandingPage.jsx'
 import Editor from './components/Editor.jsx'
 import Toast from './components/Toast.jsx'
 
@@ -131,7 +131,7 @@ function App() {
   return (
     <>
       {files.length === 0 ? (
-        <DropZone onFiles={handleFiles} />
+        <LandingPage onFiles={handleFiles} />
       ) : (
         <Editor
           files={files}

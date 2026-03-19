@@ -86,11 +86,20 @@
 
 ## Key UI Patterns
 
-### Drop Zone (Homepage)
-- The homepage IS the tool — no marketing page, no hero section.
+### Landing Page (Hybrid Hero)
+- The drop zone sits above the fold — tool-first, no scrolling to start using it.
+- Content sections below for first-time visitors: Features (with before/after demo), How It Works (3 steps), Privacy/Trust, FAQ accordion.
+- Alternating section backgrounds: `--bg` and `--surface` for visual rhythm.
+- Section padding: 64px (3xl) top/bottom. Max content width: 1120px.
+- Smooth scroll CTAs ("Try it now →") scroll back to the drop zone.
+- Floating CTA: pill button (desktop) / full-width bottom bar (mobile) appears when drop zone scrolls out of view (IntersectionObserver).
+- Scroll indicator below drop zone: bouncing chevron + "See what it does" in text-tertiary.
+
+### Drop Zone
 - Dashed border drop area, centered with icon + "Drop files here to watermark".
 - Supported format badges in monospace below: `JPG · PNG · WebP · PDF`
 - Privacy badge pill: lock icon + "files never leave your device" in accent-muted.
+- Pure component — no header, no page layout. Used as child of LandingPage.
 
 ### Editor Workspace
 - Left sidebar (280px, surface color): watermark controls stacked vertically.
@@ -168,12 +177,18 @@
 
 ## Navigation Flow
 ```
-DROP ZONE ──▶ EDITOR (single or first of batch)
-               ├── [adjust controls] ──▶ Live preview updates
-               ├── [navigate batch] ──▶ ◀/▶ between files
-               ├── [Download This] ──▶ file downloads, stay in editor (toast)
-               ├── [Download ZIP] ──▶ Processing ──▶ ZIP downloads (toast)
-               └── [Start Over] ──▶ back to DROP ZONE (clear all)
+LANDING PAGE (hero: drop zone + content sections below)
+  ├── [drop/click files] ──▶ EDITOR
+  ├── [scroll down] ──▶ Features, How It Works, Trust, FAQ
+  ├── [click "Try it now"] ──▶ smooth scroll to drop zone
+  └── [floating CTA] ──▶ smooth scroll to drop zone
+
+EDITOR (single or first of batch)
+  ├── [adjust controls] ──▶ Live preview updates
+  ├── [navigate batch] ──▶ ◀/▶ between files
+  ├── [Download This] ──▶ file downloads, stay in editor (toast)
+  ├── [Download ZIP] ──▶ Processing ──▶ ZIP downloads (toast)
+  └── [Start Over] ──▶ back to LANDING PAGE (clear all)
 ```
 
 ## Decisions Log
@@ -181,6 +196,7 @@ DROP ZONE ──▶ EDITOR (single or first of batch)
 |------|----------|-----------|
 | 2026-03-18 | Initial design system created | Created by /design-consultation. Industrial/utilitarian aesthetic chosen to differentiate from gradient-heavy competitors. Teal accent stands out in a pink/purple space. Dark workspace default prevents color-casting photos. |
 | 2026-03-18 | Tool-first homepage (no marketing page) | Drop zone IS the landing page. Users land and are immediately using the product. Bold but intentional — competitors bury their tool behind scrolling marketing content. |
+| 2026-03-19 | Hybrid Hero landing page | Tool stays above the fold (tool-first preserved). Content sections added below for first-time visitors: features, how it works, trust, FAQ. Floating CTA for return-to-tool. |
 | 2026-03-18 | Satoshi + Instrument Sans + Geist Mono | Geometric display font (Satoshi) pairs with readable body (Instrument Sans). Monospace accents (Geist Mono) for file info add technical trustworthiness. None are overused/blacklisted. |
 | 2026-03-18 | 50-file batch limit, 50MB per file | Covers typical photo sessions. Prevents browser OOM on large batches. |
 | 2026-03-18 | 5-8 curated watermark fonts | Subtraction default — covers 95% of use cases without overwhelming choice. |

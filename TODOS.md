@@ -23,6 +23,15 @@
 **Effort:** S (human ~4 hours → CC ~10 min)
 **Depends on:** Template system (v1)
 
+### Lightweight Analytics (Privacy-Respecting)
+**What:** Add privacy-respecting analytics (e.g., Plausible, Umami, or simple custom event tracking) to understand which landing page sections users engage with and measure conversion (scroll → upload).
+**Why:** The landing page has multiple CTAs and sections. Without data, we can't know if sections are working or if the floating CTA drives uploads.
+**Pros:** Data-driven iteration on landing page content; understand user journey.
+**Cons:** Any analytics is a deviation from the "zero external requests" story; needs careful framing.
+**Context:** The app is 100% client-side with a strong privacy story. Analytics must be self-hosted or privacy-first (no cookies, no PII). Consider Plausible Cloud or self-hosted Umami.
+**Effort:** S (human ~4 hours → CC ~15 min)
+**Depends on:** Landing page shipped
+
 ### ~~Progressive Web App (PWA) / Offline Support~~ ✓ Done
 **Shipped:** Added `vite-plugin-pwa` with `autoUpdate` service worker registration, installable web manifest, dark-theme metadata, and cache-first static asset precache for offline reloads after first visit.
 **What:** Add `manifest.json` and a service worker to make the app installable on desktop/mobile and functional offline after first load.
