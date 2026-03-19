@@ -62,7 +62,7 @@ export default function LandingPage({ onFiles }) {
     <div className="landing">
       {/* Header */}
       <header className="header">
-        <span className="header-title">Watermark</span>
+        <h1 className="header-title">Watermark</h1>
         <div className="header-actions">
           <ThemeToggle />
         </div>
