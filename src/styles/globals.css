@@ -1289,6 +1289,7 @@ input[type="range"]::-moz-range-thumb {
   .demo-comparison { flex-direction: column; gap: 16px; }
   .step { gap: 16px; }
   .step-number { font-size: 36px; width: 48px; }
+  .landing-footer { padding-bottom: 64px; }
 
   .floating-cta {
     bottom: 0;
