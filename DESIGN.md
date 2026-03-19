@@ -39,7 +39,7 @@
   - Border subtle: #1E1E21
   - Text primary: #FAFAFA
   - Text secondary: #A1A1AA (zinc-400)
-  - Text tertiary: #71717A (zinc-500)
+  - Text tertiary: #8B8B94
 - **Neutrals (light mode):**
   - Background: #FAFAFA
   - Surface: #FFFFFF
@@ -48,7 +48,7 @@
   - Border subtle: #F4F4F5
   - Text primary: #09090B
   - Text secondary: #52525B
-  - Text tertiary: #A1A1AA
+  - Text tertiary: #6F6F7B
   - Accent: #0284C7 (sky-600, slightly darker for contrast)
   - Accent hover: #0369A1
 - **Semantic:**
