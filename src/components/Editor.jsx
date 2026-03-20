@@ -110,13 +110,15 @@ export default function Editor({
   return (
     <div className="editor">
       <header className="header">
-        <h1 className="header-title">Watermark</h1>
-        <div className="header-actions">
-          <ThemeToggle />
-          <button className="btn btn-ghost" onClick={onStartOver}>
-            Start Over
-          </button>
-        </div>
+        <nav className="header-nav">
+          <h1 className="header-title">Watermark</h1>
+          <div className="header-actions">
+            <ThemeToggle />
+            <button className="btn btn-ghost" onClick={onStartOver}>
+              Start Over
+            </button>
+          </div>
+        </nav>
       </header>
 
       <div className="editor-layout">
