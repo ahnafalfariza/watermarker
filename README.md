@@ -8,7 +8,7 @@ A browser-only tool to add text or logo watermarks to **images** (JPG, PNG, WebP
 
 ![Watermark app — drop zone and privacy badge](./docs/screenshot.png)
 
-### Editor (after upload)
+### Editor
 
 ![Watermark app — sidebar controls and live preview](./docs/screenshot-editor.png)
 
