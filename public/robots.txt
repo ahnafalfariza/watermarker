@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://watermark.app/sitemap.xml
+Sitemap: https://watermarker-inky.vercel.app/sitemap.xml

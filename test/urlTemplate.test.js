@@ -7,7 +7,7 @@ const originalLocation = window.location
 beforeEach(() => {
   delete window.location
   window.location = {
-    origin: 'https://watermark.app',
+    origin: 'https://watermarker-inky.vercel.app',
     pathname: '/',
     search: '',
   }
@@ -65,7 +65,7 @@ describe('encodeTemplateUrl', () => {
   it('builds a full URL with origin and pathname', () => {
     const config = { text: 'DRAFT' }
     const url = encodeTemplateUrl(config)
-    expect(url).toMatch(/^https:\/\/watermark\.app\/\?/)
+    expect(url).toMatch(/^https:\/\/watermarker-inky\.vercel\.app\/\?/)
   })
 
   it('skips null and undefined values', () => {
