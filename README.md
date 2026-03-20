@@ -60,14 +60,3 @@ bunx vitest run
 ## Privacy
 
 All watermarking runs in your browser. Files are not sent to a server for processing.
-
-## Screenshots
-
-Both images were taken from the local dev server (`bun run dev`) at a **1280×800** viewport.
-
-| File | What it shows |
-|------|----------------|
-| `docs/screenshot.png` | Landing page — full-page capture of the drop zone. |
-| `docs/screenshot-editor.png` | Editor — after adding an image: sidebar, preview canvas, and download actions. |
-
-To refresh them after UI changes, replace those PNGs (for the editor shot, upload any JPG/PNG/WebP/PDF, wait for the preview, then capture the viewport).
