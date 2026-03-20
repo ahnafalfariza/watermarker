@@ -76,6 +76,14 @@ export default defineConfig({
       },
     }),
     prerenderCleanup(),
+    // vite-prerender-plugin leaves a headless browser alive after build,
+    // preventing the process from exiting naturally.
+    {
+      name: 'force-exit',
+      closeBundle() {
+        setTimeout(() => process.exit(0), 100)
+      },
+    },
   ],
   test: {
     environment: 'jsdom',
