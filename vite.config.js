@@ -1,11 +1,34 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { vitePrerenderPlugin } from 'vite-prerender-plugin'
 import { VitePWA } from 'vite-plugin-pwa'
+
+// Drops the prerender entry chunk once vite-prerender-plugin has used it, so the
+// SSR bundle isn't shipped to (or precached by) browsers. Must run after the
+// prerender plugin, which also uses enforce: 'post'.
+function dropPrerenderChunk() {
+  return {
+    name: 'drop-prerender-chunk',
+    enforce: 'post',
+    generateBundle(_opts, bundle) {
+      for (const [fileName, output] of Object.entries(bundle)) {
+        if (output.type === 'chunk' && output.isEntry && output.name === 'prerender') {
+          delete bundle[fileName]
+        }
+      }
+    },
+  }
+}
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
+    vitePrerenderPlugin({
+      renderTarget: '#root',
+      prerenderScript: new URL('./src/prerender.jsx', import.meta.url).pathname,
+    }),
+    dropPrerenderChunk(),
     VitePWA({
       registerType: 'autoUpdate',
       injectRegister: false,
