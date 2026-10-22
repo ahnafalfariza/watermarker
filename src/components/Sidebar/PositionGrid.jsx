@@ -15,7 +15,7 @@ export default function PositionGrid({ watermark, onChange }) {
           role="radiogroup"
           aria-label="Watermark position"
         >
-          {POSITIONS.map((row, ri) =>
+          {POSITIONS.map((row) =>
             row.map((pos) => (
               <button
                 key={pos}

@@ -99,12 +99,12 @@ export default function Controls({ watermark, onChange, addToast }) {
           {/* Text Controls */}
           <div className="control-group">
             <label className="control-label">Watermark Text</label>
-            <input
-              type="text"
-              className="input"
+            <textarea
+              className="input textarea"
               placeholder="Enter watermark text"
               value={watermark.text}
               onChange={handleText}
+              rows={2}
               autoFocus
             />
           </div>

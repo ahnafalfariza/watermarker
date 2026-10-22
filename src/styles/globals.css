@@ -434,6 +434,11 @@ body {
 .input:focus { border-color: var(--accent); }
 .input::placeholder { color: var(--text-tertiary); }
 
+.textarea {
+  resize: vertical;
+  line-height: 1.4;
+}
+
 .input-sm {
   padding: 4px 8px;
   font-size: 12px;
