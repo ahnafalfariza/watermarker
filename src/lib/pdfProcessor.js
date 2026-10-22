@@ -59,15 +59,17 @@ export async function renderPdfPage(file, pageNum, watermarkConfig, maxSize = 80
  * Process a PDF and apply watermark to all pages.
  * Returns a Uint8Array of the watermarked PDF.
  *
- * The watermark is overlaid on the original pages, so text, vectors and
- * embedded images are kept as-is and the output stays close to the input
- * size. PDFs pdf-lib can't open (encrypted, malformed) fall back to
- * rasterizing each page.
+ * By default the watermark is overlaid on the original pages, so text,
+ * vectors and embedded images are kept as-is and the output stays close to
+ * the input size. With `flatten`, or for PDFs pdf-lib can't open (encrypted,
+ * malformed), each page is rasterized with the watermark burned in instead.
  */
-export async function processPdf(file, watermarkConfig) {
+export async function processPdf(file, watermarkConfig, { flatten = false } = {}) {
   const { pdfLib } = await ensurePdfLibs()
 
   const arrayBuffer = await file.arrayBuffer()
+  if (flatten) return rasterizePdf(file, arrayBuffer, watermarkConfig)
+
   let doc
   try {
     doc = await pdfLib.PDFDocument.load(arrayBuffer)
@@ -135,8 +137,9 @@ async function embedWatermarkOverlay(doc, viewW, viewH, watermarkConfig) {
 }
 
 /**
- * Fallback: render every page to an image with the watermark burned in.
- * Much larger output and text is no longer selectable.
+ * Render every page to an image with the watermark burned in, so it can't be
+ * removed as a separate object. Larger output and text is no longer
+ * selectable.
  */
 async function rasterizePdf(file, arrayBuffer, watermarkConfig) {
   const { pdfjsLib, pdfLib } = await ensurePdfLibs()
@@ -166,12 +169,17 @@ async function rasterizePdf(file, arrayBuffer, watermarkConfig) {
     await page.render({ canvasContext: ctx, viewport }).promise
     drawWatermark(ctx, canvas.width, canvas.height, watermarkConfig)
 
-    const pngData = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'))
-    const pngBytes = new Uint8Array(await pngData.arrayBuffer())
-    const pngImage = await destDoc.embedPng(pngBytes)
+    // PNG is smaller for text-heavy pages, JPEG for scans and photos
+    const [pngData, jpgData] = await Promise.all([
+      new Promise(resolve => canvas.toBlob(resolve, 'image/png')),
+      new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.92)),
+    ])
+    const useJpg = jpgData.size < pngData.size
+    const bytes = new Uint8Array(await (useJpg ? jpgData : pngData).arrayBuffer())
+    const pageImage = useJpg ? await destDoc.embedJpg(bytes) : await destDoc.embedPng(bytes)
 
     const destPage = destDoc.addPage([viewport.width / 2, viewport.height / 2])
-    destPage.drawImage(pngImage, {
+    destPage.drawImage(pageImage, {
       x: 0,
       y: 0,
       width: viewport.width / 2,

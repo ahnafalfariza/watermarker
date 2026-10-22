@@ -26,10 +26,12 @@ export default function Editor({
 }) {
   const [downloading, setDownloading] = useState(false)
   const [batchProgress, setBatchProgress] = useState(null)
+  const [flattenPdf, setFlattenPdf] = useState(false)
 
   const activeFile = files[activeIndex]
   const isBatch = files.length > 1
   const isPdf = activeFile?.type === 'application/pdf'
+  const hasPdf = files.some(f => f.type === 'application/pdf')
   const canDownload = isWatermarkReady(watermark)
 
   const handleDownloadSingle = useCallback(async () => {
@@ -38,7 +40,7 @@ export default function Editor({
     try {
       let blob
       if (isPdf) {
-        const pdfBytes = await processPdf(activeFile, watermark)
+        const pdfBytes = await processPdf(activeFile, watermark, { flatten: flattenPdf })
         blob = new Blob([pdfBytes], { type: 'application/pdf' })
       } else {
         blob = await processImage(activeFile, watermark, activeFile.type)
@@ -58,7 +60,7 @@ export default function Editor({
     } finally {
       setDownloading(false)
     }
-  }, [activeFile, watermark, isPdf, addToast])
+  }, [activeFile, watermark, isPdf, flattenPdf, addToast])
 
   const handleDownloadZip = useCallback(async () => {
     if (!isWatermarkReady(watermark)) return
@@ -68,7 +70,7 @@ export default function Editor({
     try {
       const { results } = await processBatch(files, watermark, (progress) => {
         setBatchProgress(progress)
-      })
+      }, { flattenPdf })
 
       const succeeded = results.filter(r => r.success)
       const failed = results.filter(r => !r.success)
@@ -97,7 +99,7 @@ export default function Editor({
       setDownloading(false)
       setBatchProgress(null)
     }
-  }, [files, watermark, addToast])
+  }, [files, watermark, flattenPdf, addToast])
 
   const updateWatermark = useCallback((key, value) => {
     onWatermarkChange(prev => ({ ...prev, [key]: value }))
@@ -137,6 +139,28 @@ export default function Editor({
           )}
 
           <div className="sidebar-actions">
+            {hasPdf && (
+              <div className="flatten-option">
+                <label className="toggle-label">
+                  <span className="toggle-text">Flatten PDF</span>
+                  <button
+                    className={`toggle ${flattenPdf ? 'toggle-on' : ''}`}
+                    onClick={() => setFlattenPdf(v => !v)}
+                    role="switch"
+                    aria-checked={flattenPdf}
+                    aria-label="Flatten PDF"
+                    aria-describedby="flatten-hint"
+                  >
+                    <span className="toggle-thumb" />
+                  </button>
+                </label>
+                <p id="flatten-hint" className="flatten-hint">
+                  {flattenPdf
+                    ? 'Watermark is burned in and can\'t be removed. Larger file, text not selectable.'
+                    : 'Watermark is a separate layer. Small file, text stays selectable.'}
+                </p>
+              </div>
+            )}
             {isBatch ? (
               <button
                 className="btn btn-primary btn-full"
