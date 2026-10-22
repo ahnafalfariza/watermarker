@@ -12,7 +12,7 @@ import { processBatch, createZip } from '../lib/batchCoordinator.js'
 
 function isWatermarkReady(watermark) {
   if (watermark.mode === 'image') return !!watermark.logoElement
-  return !!watermark.text
+  return !!watermark.text?.trim()
 }
 
 export default function Editor({
