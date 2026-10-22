@@ -60,7 +60,12 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,pdf,woff2}'],
+        globPatterns: [
+          '**/*.{js,css,html,ico,png,svg,webp,pdf,woff2}',
+          // Font files PDF export reads to draw vector watermarks (see pdfVectorWatermark.js)
+          '**/{caveat-latin-700,instrument-serif-latin-400,geist-mono-latin-700}-normal-*.woff',
+          'fonts/*.woff',
+        ],
         navigateFallbackDenylist: [/^\/__/, /\/.*\.[^/]+$/],
       },
     }),
