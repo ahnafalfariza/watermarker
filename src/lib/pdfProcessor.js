@@ -8,9 +8,11 @@ let pdfLib = null
  */
 async function ensurePdfLibs() {
   if (!pdfjsLib) {
-    pdfjsLib = await import('pdfjs-dist')
+    // Legacy build polyfills newer JS (e.g. Map#getOrInsertComputed) that the
+    // modern build assumes, so PDFs work in browsers that aren't brand new
+    pdfjsLib = await import('pdfjs-dist/legacy/build/pdf.mjs')
     pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
-      'pdfjs-dist/build/pdf.worker.min.mjs',
+      'pdfjs-dist/legacy/build/pdf.worker.min.mjs',
       import.meta.url
     ).toString()
   }
