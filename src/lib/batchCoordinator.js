@@ -10,9 +10,11 @@ const CHUNK_SIZE = 5
  * @param {File[]} files
  * @param {object} watermarkConfig
  * @param {function} onProgress - Called with { completed, total, currentFile, status }
+ * @param {object} [options]
+ * @param {boolean} [options.flattenPdf] - Burn the watermark into PDF pages
  * @returns {Promise<{results: Array<{file: File, blob: Blob|Uint8Array, success: boolean, error?: string}>}>}
  */
-export async function processBatch(files, watermarkConfig, onProgress) {
+export async function processBatch(files, watermarkConfig, onProgress, { flattenPdf = false } = {}) {
   const results = []
   let completed = 0
 
@@ -29,7 +31,7 @@ export async function processBatch(files, watermarkConfig, onProgress) {
       try {
         let output
         if (file.type === 'application/pdf') {
-          const pdfBytes = await processPdf(file, watermarkConfig)
+          const pdfBytes = await processPdf(file, watermarkConfig, { flatten: flattenPdf })
           output = new Blob([pdfBytes], { type: 'application/pdf' })
         } else {
           output = await processImage(file, watermarkConfig, file.type)
