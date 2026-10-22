@@ -52,14 +52,19 @@ export function drawWatermark(ctx, width, height, config) {
   }
 }
 
+// Line height as a multiple of font size for multi-line text
+const LINE_HEIGHT = 1.2
+
 function drawTextWatermark(ctx, width, height, config) {
   const { text, font, size, opacity, color, position, tiled, tiledAngle, tiledSpacing } = config
 
-  if (!text) return
+  if (!text || !text.trim()) return
 
+  const lines = text.split(/\r?\n/)
   const fontFamily = FONT_MAP[font] || FONT_MAP['Satoshi']
   const minDim = Math.min(width, height)
   const fontSize = Math.max(12, Math.round((size / 100) * minDim * 0.5))
+  const lineHeight = fontSize * LINE_HEIGHT
 
   ctx.save()
   ctx.globalAlpha = opacity / 100
@@ -70,25 +75,47 @@ function drawTextWatermark(ctx, width, height, config) {
 
   if (tiled) {
     const relativeSpacing = (tiledSpacing / 500) * minDim * 0.5
-    drawTiledText(ctx, width, height, text, fontSize, tiledAngle, relativeSpacing)
+    drawTiledText(ctx, width, height, lines, fontSize, lineHeight, tiledAngle, relativeSpacing)
   } else {
     const pos = POSITION_MAP[position] || POSITION_MAP['center']
-    const textW = ctx.measureText(text).width
-    const halfW = Math.min(textW / 2, width / 2)
-    const halfH = fontSize / 2
+    const lineWidths = lines.map(line => ctx.measureText(line).width)
+    const blockW = Math.max(...lineWidths)
+    const blockH = fontSize + (lines.length - 1) * lineHeight
+    const halfW = Math.min(blockW / 2, width / 2)
+    const halfH = Math.min(blockH / 2, height / 2)
     const x = Math.max(halfW, Math.min(width - halfW, width * pos.x))
     const y = Math.max(halfH, Math.min(height - halfH, height * pos.y))
-    // Compress text if it's wider than the canvas so it never clips
-    const maxWidth = textW > width ? width : undefined
-    ctx.fillText(text, x, y, maxWidth)
+    // Compress all lines by the same factor if the block is wider than the canvas
+    const scale = blockW > width ? width / blockW : 1
+
+    // Align multi-line text to the side it sits on so corner placements look natural
+    let lineX = x
+    if (lines.length > 1 && pos.x < 0.5) {
+      ctx.textAlign = 'left'
+      lineX = x - halfW
+    } else if (lines.length > 1 && pos.x > 0.5) {
+      ctx.textAlign = 'right'
+      lineX = x + halfW
+    }
+
+    const firstY = y - (lines.length - 1) * lineHeight / 2
+    lines.forEach((line, i) => {
+      const maxWidth = scale < 1 ? lineWidths[i] * scale : undefined
+      ctx.fillText(line, lineX, firstY + i * lineHeight, maxWidth)
+    })
   }
 
   ctx.restore()
 }
 
-function drawTiledText(ctx, width, height, text, fontSize, angle, spacing) {
+function drawTiledText(ctx, width, height, lines, fontSize, lineHeight, angle, spacing) {
   const radians = (angle * Math.PI) / 180
+  const blockExtra = (lines.length - 1) * lineHeight
   const gap = Math.max(fontSize * 1.5, spacing)
+  const blockW = Math.max(...lines.map(line => ctx.measureText(line).width))
+  // Tiles must clear the full text block so neighbours don't overlap
+  const gapX = Math.max(gap * 2, blockW + fontSize)
+  const gapY = gap + blockExtra
   const diagonal = Math.sqrt(width * width + height * height)
 
   ctx.save()
@@ -98,9 +125,11 @@ function drawTiledText(ctx, width, height, text, fontSize, angle, spacing) {
   const startX = -diagonal
   const startY = -diagonal
 
-  for (let y = startY; y < diagonal; y += gap) {
-    for (let x = startX; x < diagonal; x += gap * 2) {
-      ctx.fillText(text, x, y)
+  for (let y = startY; y < diagonal; y += gapY) {
+    for (let x = startX; x < diagonal; x += gapX) {
+      lines.forEach((line, i) => {
+        ctx.fillText(line, x, y - blockExtra / 2 + i * lineHeight)
+      })
     }
   }
 

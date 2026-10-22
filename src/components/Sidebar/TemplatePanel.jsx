@@ -1,16 +1,12 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { getTemplates, saveTemplate, deleteTemplate, loadTemplate } from '../../lib/templateManager.js'
 import { loadLogoImage } from '../../lib/watermarkRenderer.js'
 import { encodeTemplateUrl } from '../../lib/urlTemplate.js'
 
 export default function TemplatePanel({ watermark, onLoad, addToast }) {
-  const [templates, setTemplates] = useState([])
+  const [templates, setTemplates] = useState(getTemplates)
   const [saving, setSaving] = useState(false)
   const [newName, setNewName] = useState('')
-
-  useEffect(() => {
-    setTemplates(getTemplates())
-  }, [])
 
   const handleSave = useCallback(() => {
     if (!newName.trim()) return
