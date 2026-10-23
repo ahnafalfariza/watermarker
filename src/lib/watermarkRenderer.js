@@ -44,6 +44,16 @@ export function loadLogoImage(dataUri) {
   })
 }
 
+/**
+ * Resolves once the watermark font has loaded. Canvases don't wait for web
+ * fonts and would otherwise draw the first frame in a fallback font.
+ */
+export function loadWatermarkFont(config) {
+  if (config.mode === 'image' || typeof document === 'undefined' || !document.fonts) return Promise.resolve()
+  const fontFamily = FONT_MAP[config.font] || FONT_MAP['Satoshi']
+  return document.fonts.load(`bold 16px ${fontFamily}`).catch(() => {})
+}
+
 export function drawWatermark(ctx, width, height, config) {
   if (config.mode === 'image') {
     drawImageWatermark(ctx, width, height, config)

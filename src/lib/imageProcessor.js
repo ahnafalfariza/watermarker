@@ -1,11 +1,11 @@
-import { drawWatermark } from './watermarkRenderer.js'
+import { drawWatermark, loadWatermarkFont } from './watermarkRenderer.js'
 
 /**
  * Process an image file and apply watermark.
  * Returns a Blob of the watermarked image.
  */
 export async function processImage(file, watermarkConfig, outputFormat = 'image/png') {
-  const img = await loadImage(file)
+  const [img] = await Promise.all([loadImage(file), loadWatermarkFont(watermarkConfig)])
   const canvas = document.createElement('canvas')
   canvas.width = img.naturalWidth
   canvas.height = img.naturalHeight
@@ -32,7 +32,7 @@ export async function processImage(file, watermarkConfig, outputFormat = 'image/
  * Generate a preview (smaller version for live display).
  */
 export async function generatePreview(file, watermarkConfig, maxSize = 800) {
-  const img = await loadImage(file)
+  const [img] = await Promise.all([loadImage(file), loadWatermarkFont(watermarkConfig)])
 
   const scale = Math.min(1, maxSize / Math.max(img.naturalWidth, img.naturalHeight))
   const width = Math.round(img.naturalWidth * scale)
