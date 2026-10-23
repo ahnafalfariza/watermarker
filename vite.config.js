@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { vitePrerenderPlugin } from 'vite-prerender-plugin'
 import { VitePWA } from 'vite-plugin-pwa'
+import { playwright } from '@vitest/browser-playwright'
 
 // Drops the prerender entry chunk once vite-prerender-plugin has used it, so the
 // SSR bundle isn't shipped to (or precached by) browsers. Must run after the
@@ -65,9 +66,32 @@ export default defineConfig({
     }),
   ],
   test: {
-    environment: 'jsdom',
     globals: true,
-    setupFiles: ['./test/setup.js'],
     exclude: ['.claude/**', 'node_modules/**'],
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: 'unit',
+          environment: 'jsdom',
+          setupFiles: ['./test/setup.js'],
+          exclude: ['.claude/**', 'node_modules/**', 'test/browser/**'],
+        },
+      },
+      {
+        // PDF export needs a real canvas and pdf.js worker, which jsdom lacks
+        extends: true,
+        test: {
+          name: 'browser',
+          include: ['test/browser/**/*.test.js'],
+          browser: {
+            enabled: true,
+            provider: playwright(),
+            headless: true,
+            instances: [{ browser: 'chromium' }],
+          },
+        },
+      },
+    ],
   },
 })
