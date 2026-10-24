@@ -3,6 +3,11 @@ import { drawWatermark } from './watermarkRenderer.js'
 let pdfjsLib = null
 let pdfLib = null
 
+// Flattened pages: 1.5x (108 dpi) and JPEG q0.85 stay readable when zoomed and
+// are about half the size of 2x / q0.92
+const RASTER_SCALE = 1.5
+const JPEG_QUALITY = 0.85
+
 /**
  * Lazy-load PDF.js and pdf-lib on first use.
  */
@@ -161,7 +166,7 @@ async function rasterizePdf(file, arrayBuffer, watermarkConfig) {
 
   for (let i = 1; i <= srcDoc.numPages; i++) {
     const page = await srcDoc.getPage(i)
-    const viewport = page.getViewport({ scale: 2 }) // 2x for quality
+    const viewport = page.getViewport({ scale: RASTER_SCALE })
 
     const canvas = document.createElement('canvas')
     canvas.width = Math.round(viewport.width)
@@ -174,19 +179,16 @@ async function rasterizePdf(file, arrayBuffer, watermarkConfig) {
     // PNG is smaller for text-heavy pages, JPEG for scans and photos
     const [pngData, jpgData] = await Promise.all([
       new Promise(resolve => canvas.toBlob(resolve, 'image/png')),
-      new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.92)),
+      new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', JPEG_QUALITY)),
     ])
     const useJpg = jpgData.size < pngData.size
     const bytes = new Uint8Array(await (useJpg ? jpgData : pngData).arrayBuffer())
     const pageImage = useJpg ? await destDoc.embedJpg(bytes) : await destDoc.embedPng(bytes)
 
-    const destPage = destDoc.addPage([viewport.width / 2, viewport.height / 2])
-    destPage.drawImage(pageImage, {
-      x: 0,
-      y: 0,
-      width: viewport.width / 2,
-      height: viewport.height / 2,
-    })
+    const pageWidth = viewport.width / RASTER_SCALE
+    const pageHeight = viewport.height / RASTER_SCALE
+    const destPage = destDoc.addPage([pageWidth, pageHeight])
+    destPage.drawImage(pageImage, { x: 0, y: 0, width: pageWidth, height: pageHeight })
   }
 
   return await destDoc.save()
