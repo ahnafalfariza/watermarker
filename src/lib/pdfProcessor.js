@@ -1,4 +1,5 @@
-import { drawWatermark } from './watermarkRenderer.js'
+import { drawWatermark, loadWatermarkFont } from './watermarkRenderer.js'
+import { buildVectorWatermark, createVectorCache } from './pdfVectorWatermark.js'
 
 let pdfjsLib = null
 let pdfLib = null
@@ -31,7 +32,7 @@ async function ensurePdfLibs() {
  * Render a single PDF page to canvas for preview.
  */
 export async function renderPdfPage(file, pageNum, watermarkConfig, maxSize = 800) {
-  const { pdfjsLib } = await ensurePdfLibs()
+  const [{ pdfjsLib }] = await Promise.all([ensurePdfLibs(), loadWatermarkFont(watermarkConfig)])
 
   const arrayBuffer = await file.arrayBuffer()
   let doc
@@ -68,11 +69,12 @@ export async function renderPdfPage(file, pageNum, watermarkConfig, maxSize = 80
  *
  * By default the watermark is overlaid on the original pages, so text,
  * vectors and embedded images are kept as-is and the output stays close to
- * the input size. With `flatten`, or for PDFs pdf-lib can't open (encrypted,
+ * the input size. The overlay is drawn as vector shapes when the font allows
+ * it, otherwise as a transparent image. With `flatten`, or for PDFs pdf-lib can't open (encrypted,
  * malformed), each page is rasterized with the watermark burned in instead.
  */
 export async function processPdf(file, watermarkConfig, { flatten = false } = {}) {
-  const { pdfLib } = await ensurePdfLibs()
+  const [{ pdfLib }] = await Promise.all([ensurePdfLibs(), loadWatermarkFont(watermarkConfig)])
 
   const arrayBuffer = await file.arrayBuffer()
   if (flatten) return rasterizePdf(file, arrayBuffer, watermarkConfig)
@@ -84,8 +86,9 @@ export async function processPdf(file, watermarkConfig, { flatten = false } = {}
     return rasterizePdf(file, arrayBuffer, watermarkConfig)
   }
 
-  // Pages with the same visible size share one embedded watermark image
+  // Pages with the same visible size share one embedded watermark
   const overlayCache = new Map()
+  const vectorCache = createVectorCache()
 
   for (const page of doc.getPages()) {
     const { x, y, width, height } = page.getCropBox()
@@ -98,7 +101,10 @@ export async function processPdf(file, watermarkConfig, { flatten = false } = {}
     const key = `${viewW}x${viewH}`
     let overlay = overlayCache.get(key)
     if (!overlay) {
-      overlay = await embedWatermarkOverlay(doc, viewW, viewH, watermarkConfig)
+      const form = await buildVectorWatermark(doc, pdfLib, viewW, viewH, watermarkConfig, vectorCache)
+      overlay = form
+        ? { form }
+        : { image: await embedWatermarkOverlay(doc, viewW, viewH, watermarkConfig) }
       overlayCache.set(key, overlay)
     }
 
@@ -114,13 +120,27 @@ export async function processPdf(file, watermarkConfig, { flatten = false } = {}
       270: { x,             y: y + height },
     }[rotation] || { x, y }
 
-    page.drawImage(overlay, {
-      x: origin.x,
-      y: origin.y,
-      width: viewW,
-      height: viewH,
-      rotate: pdfLib.degrees(rotation),
-    })
+    if (overlay.form) {
+      const { PDFOperator, PDFNumber } = pdfLib
+      const radians = (rotation * Math.PI) / 180
+      const cos = Math.round(Math.cos(radians))
+      const sin = Math.round(Math.sin(radians))
+      const name = page.node.newXObject('Wm', overlay.form)
+      page.pushOperators(
+        PDFOperator.of('q'),
+        PDFOperator.of('cm', [cos, sin, -sin, cos, origin.x, origin.y].map(n => PDFNumber.of(n))),
+        PDFOperator.of('Do', [name]),
+        PDFOperator.of('Q'),
+      )
+    } else {
+      page.drawImage(overlay.image, {
+        x: origin.x,
+        y: origin.y,
+        width: viewW,
+        height: viewH,
+        rotate: pdfLib.degrees(rotation),
+      })
+    }
   }
 
   return await doc.save()
